@@ -26,11 +26,38 @@ create table if not exists enquiries (
 );
 alter table enquiries enable row level security;
 
-create policy "Anyone can submit an enquiry"
-  on enquiries for insert with check (true);
 create policy "Admins can read enquiries"
   on enquiries for select using (auth.role() = 'authenticated');
 create policy "Admins can update enquiries"
   on enquiries for update using (auth.role() = 'authenticated');
 create policy "Admins can delete enquiries"
   on enquiries for delete using (auth.role() = 'authenticated');
+
+-- Public submission goes through a SECURITY DEFINER function so the browser
+-- never needs INSERT/SELECT rights on the table directly. It returns only the
+-- new row id, which the /api/notify function re-reads server-side.
+create or replace function public.submit_enquiry(
+  p_name text,
+  p_phone text,
+  p_email text,
+  p_interest text,
+  p_message text
+) returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  new_id uuid;
+begin
+  if p_name is null or length(trim(p_name)) = 0 then
+    raise exception 'name is required';
+  end if;
+  insert into enquiries (name, phone, email, interest, message)
+  values (trim(p_name), p_phone, p_email, p_interest, p_message)
+  returning id into new_id;
+  return new_id;
+end;
+$$;
+
+grant execute on function public.submit_enquiry(text, text, text, text, text) to anon, authenticated;
