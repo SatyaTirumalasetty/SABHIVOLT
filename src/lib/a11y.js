@@ -8,7 +8,9 @@ export function useDialogA11y(containerRef, onClose) {
     const previouslyFocused = document.activeElement;
     const getFocusables = () =>
       Array.from(
-        el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        el.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
       ).filter((n) => !n.disabled && n.offsetParent !== null);
 
     const onKey = (e) => {

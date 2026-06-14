@@ -1,17 +1,59 @@
 import React, { useState, useEffect, useRef } from "react";
+import {
+  Zap,
+  PlugZap,
+  Briefcase,
+  Home,
+  Store,
+  ArrowRight,
+  Check,
+  ShieldCheck,
+  Smartphone,
+  Server,
+  CarFront,
+  QrCode,
+  Building2,
+  Car,
+  Truck,
+  ShoppingBag,
+  Globe,
+  Share2,
+  Mail,
+  Play,
+  Apple,
+} from "lucide-react";
 import { prefersReducedMotion, statusColor } from "../lib/content";
 import { useDialogA11y } from "../lib/a11y";
 
+/* ── icon registry ────────────────────────────────────── */
+const ICONS = {
+  zap: Zap,
+  plug: PlugZap,
+  briefcase: Briefcase,
+  home: Home,
+  store: Store,
+  building: Building2,
+  car: Car,
+  truck: Truck,
+  bag: ShoppingBag,
+};
+export function Icon({ name, ...props }) {
+  const C = ICONS[name] || Zap;
+  return <C {...props} />;
+}
+
 /* ── text helpers ─────────────────────────────────────── */
 
-/** Render "[word]" segments as highlighted <em> */
+/** Render "[word]" segments as a gradient highlight */
 export function Highlight({ text }) {
   const parts = String(text).split(/(\[[^\]]+\])/g);
   return (
     <>
       {parts.map((p, i) =>
         p.startsWith("[") && p.endsWith("]") ? (
-          <em key={i}>{p.slice(1, -1)}</em>
+          <em key={i} className="sv-gradient">
+            {p.slice(1, -1)}
+          </em>
         ) : (
           <React.Fragment key={i}>{p}</React.Fragment>
         )
@@ -91,178 +133,233 @@ export function CountStat({ value, label }) {
   );
 }
 
-/* ── energy flow diagram ──────────────────────────────── */
+/* ── command-center dashboard mockup ──────────────────── */
 
-const FlowIcons = [
-  // sun
-  <svg key="sun" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <circle cx="17" cy="17" r="7" stroke="#FFB930" strokeWidth="2" />
-    {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => {
-      const r1 = 10.5, r2 = 14.5;
-      const rad = (a * Math.PI) / 180;
-      return (
-        <line
-          key={a}
-          x1={17 + r1 * Math.cos(rad)} y1={17 + r1 * Math.sin(rad)}
-          x2={17 + r2 * Math.cos(rad)} y2={17 + r2 * Math.sin(rad)}
-          stroke="#FFB930" strokeWidth="2" strokeLinecap="round"
-        />
-      );
-    })}
-  </svg>,
-  // battery
-  <svg key="batt" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <rect x="5" y="11" width="22" height="12" rx="2" stroke="#00D4AA" strokeWidth="2" />
-    <rect x="28" y="14.5" width="3" height="5" rx="1" fill="#00D4AA" />
-    <rect x="8" y="14" width="10" height="6" rx="1" fill="#00D4AA" />
-  </svg>,
-  // bolt
-  <svg key="bolt" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <path d="M19 4 L9 19 H16 L14 30 L25 14 H18 L19 4 Z" stroke="#00D4AA" strokeWidth="2" strokeLinejoin="round" fill="rgba(0,212,170,0.18)" />
-  </svg>,
-  // rupee
-  <svg key="rupee" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <text x="17" y="24" textAnchor="middle" fontSize="20" fontFamily="sans-serif" fill="#FFB930">₹</text>
-    <circle cx="17" cy="17" r="13" stroke="#FFB930" strokeWidth="2" />
-  </svg>,
-];
+const BAR_HEIGHTS = [30, 45, 60, 85, 95, 70, 80, 50];
 
-function FlowWire() {
+export function CommandCenter({ data }) {
   return (
-    <div className="sv-flow-link" aria-hidden="true">
-      <svg viewBox="0 0 64 16" preserveAspectRatio="none">
-        <line className="sv-flow-wire" x1="0" y1="8" x2="64" y2="8" />
-      </svg>
-    </div>
-  );
-}
-
-export function FlowDiagram({ flow }) {
-  return (
-    <div className="sv-flow">
-      {flow.steps.map((s, i) => (
-        <React.Fragment key={i}>
-          {i > 0 && <FlowWire />}
-          <div className="sv-flow-step sv-reveal">
-            <div className="sv-flow-icon">{FlowIcons[i] || FlowIcons[2]}</div>
-            <h4>{s.title}</h4>
-            <p>{s.text}</p>
+    <div className="sv-dash">
+      <div className="sv-dash-bar">
+        <div className="sv-dash-dots">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="sv-dash-title">SABHIVOLT Command Center</div>
+        <div style={{ width: 40 }} />
+      </div>
+      <div className="sv-dash-body">
+        <div className="sv-dash-head">
+          <div>
+            <p className="label">Live hub status</p>
+            <h3>{data.node}</h3>
           </div>
-        </React.Fragment>
-      ))}
+          <span className="sv-dash-status">
+            <span className="live" />
+            {data.status}
+          </span>
+        </div>
+
+        <div className="sv-dash-metrics">
+          <div className="sv-dash-metric">
+            <p className="k">{data.revenueLabel}</p>
+            <p className="v">
+              <b>{data.revenue}</b>
+              <span className="delta">{data.revenueDelta}</span>
+            </p>
+          </div>
+          <div className="sv-dash-metric">
+            <p className="k">{data.portsLabel}</p>
+            <p className="v">
+              <b>{data.portsActive}</b>
+              <span className="sub">/ {data.portsTotal} ports</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="sv-dash-graph">
+          <div className="top">
+            <p className="k">Dynamic load management</p>
+            <p className="cap">{data.loadCap}</p>
+          </div>
+          <div className="sv-dash-bars" aria-hidden="true">
+            {BAR_HEIGHTS.map((h, i) => (
+              <i key={i} style={{ height: `${h}%`, opacity: 0.25 + (h / 100) * 0.75 }} />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ── Andhra Pradesh network map ───────────────────────── */
+/* ── India network map (Leaflet, loaded lazily) ───────── */
 
-// Simplified AP outline (lat, lon) — stylised, not survey-accurate
-const AP_OUTLINE = [
-  [19.05, 84.45], [18.78, 84.05], [18.45, 83.55], [18.1, 83.4],
-  [17.75, 83.35], [17.6, 83.0], [17.3, 82.55], [17.0, 82.3],
-  [16.75, 82.3], [16.55, 81.85], [16.3, 81.3], [16.05, 81.05],
-  [15.75, 80.45], [15.4, 80.15], [14.9, 80.1], [14.4, 80.15],
-  [13.95, 80.2], [13.55, 80.15], [13.45, 79.95], [13.2, 79.75],
-  [13.05, 79.4], [12.95, 78.95], [12.75, 78.55], [12.85, 78.25],
-  [13.3, 78.1], [13.6, 77.9], [14.0, 77.45], [14.45, 77.1],
-  [14.9, 76.95], [15.25, 77.05], [15.45, 77.3], [15.8, 77.45],
-  [15.95, 77.9], [16.05, 78.3], [16.1, 78.9], [16.3, 79.25],
-  [16.55, 79.7], [16.75, 80.1], [16.95, 80.5], [16.85, 80.95],
-  [17.1, 81.2], [17.45, 81.4], [17.8, 81.65], [18.1, 81.95],
-  [18.35, 82.3], [18.6, 82.7], [18.85, 83.3], [19.1, 83.9],
-];
+export function IndiaMap({ locations }) {
+  const ref = useRef(null);
+  const mapRef = useRef(null);
 
-// NH-16 coastal corridor waypoints (Chennai→Kolkata trunk through AP)
-const NH16_PATH = [
-  [13.7, 80.1], [14.44, 79.99], [15.5, 80.05], [16.31, 80.44],
-  [16.43, 80.55], [16.51, 80.65], [16.95, 81.78], [17.0, 82.25],
-  [17.69, 83.22], [18.3, 83.9], [18.9, 84.4],
-];
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const L = (await import("leaflet")).default;
+      await import("leaflet/dist/leaflet.css");
+      if (cancelled || !ref.current || mapRef.current) return;
 
-const MAP_W = 420, MAP_H = 420, MAP_PAD = 16;
-function project(lat, lon) {
-  const LON_MIN = 76.7, LON_MAX = 84.7, LAT_MIN = 12.5, LAT_MAX = 19.3;
-  const x = MAP_PAD + ((lon - LON_MIN) / (LON_MAX - LON_MIN)) * (MAP_W - MAP_PAD * 2);
-  const y = MAP_PAD + ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * (MAP_H - MAP_PAD * 2);
-  return [x, y];
-}
+      const map = L.map(ref.current, { scrollWheelZoom: false, zoomControl: false }).setView(
+        [19.5, 79],
+        4.4
+      );
+      L.control.zoom({ position: "topright" }).addTo(map);
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap &copy; CARTO",
+      }).addTo(map);
+      mapRef.current = map;
 
-export function APMap({ locations }) {
-  const outline = AP_OUTLINE.map(([lat, lon]) => project(lat, lon).join(",")).join(" ");
-  const nh16 = NH16_PATH.map(([lat, lon], i) => {
-    const [x, y] = project(lat, lon);
-    return `${i === 0 ? "M" : "L"}${x},${y}`;
-  }).join(" ");
+      const pts = [];
+      locations.forEach((loc) => {
+        const lat = parseFloat(loc.lat);
+        const lon = parseFloat(loc.lon);
+        if (Number.isNaN(lat) || Number.isNaN(lon)) return;
+        const color = statusColor(loc.status);
+        const icon = L.divIcon({
+          className: "",
+          html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:3px solid #fff;box-shadow:0 4px 8px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>`,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+          popupAnchor: [0, -12],
+        });
+        const speed = loc.speed ? String(loc.speed) : "";
+        const fast = speed.toLowerCase().includes("ultra") || speed.includes("480");
+        const badgeStyle = fast
+          ? "background:#ecfdf5;color:#047857;border-color:#a7f3d0"
+          : "background:#f1f5f9;color:#334155;border-color:#e2e8f0";
+        L.marker([lat, lon], { icon })
+          .addTo(map)
+          .bindPopup(
+            `<div class="sv-pop"><h5>${esc(loc.name)}</h5><div class="meta">${esc(loc.detail || "")}</div>` +
+              (speed
+                ? `<span class="badge" style="${badgeStyle}">${esc(speed)}${loc.ports ? ` · ${loc.ports} ports` : ""}</span>`
+                : "") +
+              `</div>`
+          );
+        pts.push([lat, lon]);
+      });
+      if (pts.length > 1) map.fitBounds(pts, { padding: [40, 40], maxZoom: 6 });
+    })();
+
+    return () => {
+      cancelled = true;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [locations]);
 
   return (
-    <div className="sv-map-frame">
-      <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} role="img" aria-label="Map of Andhra Pradesh showing SABHIVOLT network locations">
-        <polygon className="sv-map-state" points={outline} />
-        <path className="sv-map-nh16" d={nh16} />
-        <text className="sv-map-label" x={project(15.2, 80.6)[0]} y={project(15.2, 80.6)[1]} fill="#FFB930">NH-16</text>
-        {locations.map((l, i) => {
-          const lat = parseFloat(l.lat), lon = parseFloat(l.lon);
-          if (Number.isNaN(lat) || Number.isNaN(lon)) return null;
-          const [x, y] = project(lat, lon);
-          const col = statusColor(l.status);
-          const labelRight = x < MAP_W * 0.62;
-          return (
-            <g key={i}>
-              <circle className="sv-node-pulse" cx={x} cy={y} r="8" fill="none" stroke={col} strokeWidth="1.5" />
-              <circle cx={x} cy={y} r="4.5" fill={col} />
-              <circle cx={x} cy={y} r="9" fill="none" stroke={col} strokeOpacity="0.3" strokeWidth="1" />
-              <text
-                className="sv-map-label"
-                x={labelRight ? x + 14 : x - 14}
-                y={y + 3.5}
-                textAnchor={labelRight ? "start" : "end"}
-                fill="#E9F4EF"
-              >
-                {l.name}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-      <div className="sv-map-caption">Stylised map · not to survey scale</div>
+    <div
+      className="sv-map"
+      ref={ref}
+      role="img"
+      aria-label="Map of SABHIVOLT charging locations across India"
+    />
+  );
+}
+
+function esc(s) {
+  return String(s).replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
+  );
+}
+
+/* ── driver app phone mockup ──────────────────────────── */
+
+export function PhoneMockup() {
+  return (
+    <div className="sv-phone-wrap">
+      <div className="sv-phone" aria-hidden="true">
+        <div className="notch" />
+        <div className="sv-phone-head">
+          <div>
+            <p className="label">Welcome back</p>
+            <h3>Arjun M.</h3>
+          </div>
+          <div className="sv-phone-wallet">
+            <p className="label">Wallet</p>
+            <p className="v">₹650.00</p>
+          </div>
+        </div>
+        <div className="sv-phone-body">
+          <div className="sv-phone-veh">
+            <div>
+              <p className="k">Vehicle selected</p>
+              <h4>Tata Nexon EV Max</h4>
+            </div>
+            <span className="ic">
+              <CarFront size={16} />
+            </span>
+          </div>
+          <div className="sv-phone-hub">
+            <Zap className="bg" size={120} />
+            <p className="k">Nearest fast hub</p>
+            <h3>
+              Benz Circle,
+              <br />
+              Vijayawada
+            </h3>
+            <div className="sv-phone-tags">
+              <span>2.5 km away</span>
+              <span>₹18/kWh</span>
+            </div>
+            <div className="sv-phone-avail">
+              <span className="live" />
+              2× 60kW CCS2 available
+            </div>
+          </div>
+        </div>
+        <div className="sv-phone-foot">
+          <button className="sv-btn sv-btn-solid sv-btn-block">
+            <QrCode size={18} /> Scan QR to charge
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ── privacy & terms modal ────────────────────────────── */
+export const TrustIcons = { Smartphone, Server, ShieldCheck };
+export { Check, ArrowRight, Play, Apple, Globe, Share2, Mail };
+
+/* ── privacy / terms modal ────────────────────────────── */
 
 export function PrivacyModal({ onClose }) {
   const ref = useRef(null);
   useDialogA11y(ref, onClose);
   return (
     <div className="sv-overlay" role="dialog" aria-modal="true" aria-label="Privacy and terms">
-      <div className="sv-modal" ref={ref}>
+      <div className="sv-modal sv-modal-scroll" ref={ref} style={{ width: "min(640px, 100%)" }}>
         <h2>Privacy &amp; terms</h2>
-        <h4>What we collect</h4>
         <p>
-          When you send an enquiry, we collect the details you provide — your name, contact
-          information and message — solely to respond to your enquiry and discuss potential
-          partnerships.
+          SABHIVOLT collects the details you submit through the enquiry form (name, phone, email,
+          area of interest and message) solely to respond to your enquiry and discuss potential
+          partnerships. We do not sell your data.
         </p>
-        <h4>How it's used</h4>
-        <ul>
-          <li>We use your details only to contact you about your enquiry.</li>
-          <li>We do not sell or share your information with third parties for marketing.</li>
-          <li>You may ask us to correct or delete your details at any time by contacting us.</li>
-        </ul>
-        <h4>Data protection</h4>
         <p>
-          We handle personal data in line with India's Digital Personal Data Protection Act, 2023.
-          For any privacy request, write to us at the contact address on this site.
+          Information is stored securely and accessed only by authorised SABHIVOLT staff. You can
+          request deletion of your enquiry at any time by emailing us.
         </p>
-        <h4>Terms of use</h4>
         <p>
-          Content on this site is provided for general information about SABHIVOLT's services and
-          does not constitute an offer or commercial commitment. Project statuses shown are
-          indicative and subject to change.
+          This website is provided on an "as is" basis. Project details, locations and figures are
+          indicative and subject to change as the network develops.
         </p>
-        <div className="close-row">
-          <button className="sv-btn sv-btn-solid" onClick={onClose}>Close</button>
+        <div className="sv-modal-row">
+          <button className="sv-btn sv-btn-solid" onClick={onClose}>
+            Close
+          </button>
         </div>
       </div>
     </div>

@@ -31,7 +31,9 @@ export async function saveContent(content) {
     .eq("key", "live")
     .maybeSingle();
   if (live?.content) {
-    await supabase.from("site_content").upsert({ key: "backup", content: live.content, updated_at: new Date().toISOString() });
+    await supabase
+      .from("site_content")
+      .upsert({ key: "backup", content: live.content, updated_at: new Date().toISOString() });
   }
   const { error } = await supabase
     .from("site_content")
@@ -54,19 +56,22 @@ export async function loadBackup() {
 
 export async function submitEnquiry(entry) {
   if (!supabase) return false;
-  const { error } = await supabase.from("enquiries").insert({
-    name: entry.name,
-    phone: entry.phone,
-    email: entry.email,
-    interest: entry.interest,
-    message: entry.message,
+  // SECURITY DEFINER RPC inserts the row and returns only its id (anon cannot
+  // SELECT the enquiries table directly under RLS). See supabase/schema.sql.
+  const { data: id, error } = await supabase.rpc("submit_enquiry", {
+    p_name: entry.name,
+    p_phone: entry.phone,
+    p_email: entry.email,
+    p_interest: entry.interest,
+    p_message: entry.message,
   });
-  if (error) return false;
-  // fire-and-forget notification; never block the user on it
+  if (error || !id) return false;
+  // fire-and-forget notification; never block the user on it. Only the id is
+  // sent — the serverless function re-reads the row server-side (see api/notify.js).
   fetch("/api/notify", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(entry),
+    body: JSON.stringify({ id }),
   }).catch(() => {});
   return true;
 }
