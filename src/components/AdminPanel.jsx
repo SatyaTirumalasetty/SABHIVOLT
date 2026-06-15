@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { DEFAULT_CONTENT, deepClone } from "../lib/content";
+import { DEFAULT_CONTENT, THEMES, deepClone } from "../lib/content";
 import {
   listEnquiries, setEnquiryRead, deleteEnquiry,
   loadBackup, signOut,
@@ -96,6 +96,13 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
     onSignedOut();
   };
 
+  const chooseTheme = async (id) => {
+    const next = { ...draft, theme: id };
+    setDraft(next);
+    setSaveState("saving");
+    flashSave(await onSave(next));
+  };
+
   return (
     <div className="sv-admin" role="dialog" aria-modal="true" aria-label="Site admin">
       <div className="sv-admin-panel" ref={panelRef}>
@@ -117,7 +124,7 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
           <>
             <h3>Hero</h3>
             <Field label="Eyebrow" value={draft.hero.eyebrow} onChange={(v) => set("hero.eyebrow", v)} />
-            <Field label="Headline — wrap a word in [brackets] to highlight it in teal" value={draft.hero.headline} onChange={(v) => set("hero.headline", v)} textarea />
+            <Field label="Headline — wrap a phrase in [brackets] to highlight it in emerald" value={draft.hero.headline} onChange={(v) => set("hero.headline", v)} textarea />
             <Field label="Subheadline" value={draft.hero.subheadline} onChange={(v) => set("hero.subheadline", v)} textarea />
             <Field label="Primary button" value={draft.hero.ctaPrimary} onChange={(v) => set("hero.ctaPrimary", v)} />
             <Field label="Secondary button" value={draft.hero.ctaSecondary} onChange={(v) => set("hero.ctaSecondary", v)} />
@@ -135,7 +142,7 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
             ))}
             <button className="sv-mini-btn add" onClick={() => set("stats", [...draft.stats, { value: "", label: "" }])}>+ Add stat</button>
 
-            <h3>Services / verticals</h3>
+            <h3>Business solutions</h3>
             {draft.services.map((s, i) => (
               <div className="sv-admin-card" key={i}>
                 <div className="sv-admin-card-head">
@@ -153,21 +160,21 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
                     <button className="sv-mini-btn danger" onClick={() => set("services", draft.services.filter((_, j) => j !== i))}>Remove</button>
                   </div>
                 </div>
-                <Field label="Code (e.g. EV-01)" value={s.code} onChange={(v) => { const a = [...draft.services]; a[i] = { ...a[i], code: v }; set("services", a); }} />
+                <Field label="Code (e.g. TP-01)" value={s.code} onChange={(v) => { const a = [...draft.services]; a[i] = { ...a[i], code: v }; set("services", a); }} />
                 <Field label="Title" value={s.title} onChange={(v) => { const a = [...draft.services]; a[i] = { ...a[i], title: v }; set("services", a); }} />
                 <Field label="Description" value={s.description} textarea onChange={(v) => { const a = [...draft.services]; a[i] = { ...a[i], description: v }; set("services", a); }} />
               </div>
             ))}
             <button className="sv-mini-btn add" onClick={() => set("services", [...draft.services, { code: `XX-0${draft.services.length + 1}`, title: "", description: "" }])}>+ Add service</button>
 
-            <h3>Energy flow diagram</h3>
+            <h3>Partner model</h3>
             <Field label="Eyebrow" value={draft.flow.eyebrow} onChange={(v) => set("flow.eyebrow", v)} />
             <Field label="Headline" value={draft.flow.headline} onChange={(v) => set("flow.headline", v)} />
             <Field label="Body" value={draft.flow.body} onChange={(v) => set("flow.body", v)} textarea />
             {draft.flow.steps.map((s, i) => (
               <div className="sv-admin-card" key={i}>
                 <div className="sv-admin-card-head">
-                  <b>STEP {i + 1} — {["SOLAR", "STORAGE", "CHARGING", "REVENUE"][i]}</b>
+                  <b>STEP {i + 1} — {["SURVEY", "INSTALL", "OPERATE", "EARN"][i]}</b>
                 </div>
                 <Field label="Title" value={s.title} onChange={(v) => { const a = [...draft.flow.steps]; a[i] = { ...a[i], title: v }; set("flow.steps", a); }} />
                 <Field label="Text" value={s.text} onChange={(v) => { const a = [...draft.flow.steps]; a[i] = { ...a[i], text: v }; set("flow.steps", a); }} />
@@ -179,8 +186,8 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
             <Field label="Headline" value={draft.network.headline} onChange={(v) => set("network.headline", v)} />
             <Field label="Body" value={draft.network.body} onChange={(v) => set("network.body", v)} textarea />
             <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 12 }}>
-              Status sets the node colour: Headquarters/Live = teal, In development = amber,
-              anything else = grey. Coordinates place the node on the AP map.
+              Status sets the node colour: Live/Headquarters = emerald, In development = amber,
+              anything else = grey. Coordinates place the node on the national map.
             </p>
             {draft.network.locations.map((l, i) => (
               <div className="sv-admin-card" key={i}>
@@ -189,36 +196,36 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
                   <button className="sv-mini-btn danger" onClick={() => set("network.locations", draft.network.locations.filter((_, j) => j !== i))}>Remove</button>
                 </div>
                 <Field label="Name" value={l.name} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], name: v }; set("network.locations", a); }} />
-                <Field label="Status (Live / Headquarters / In development / Planned)" value={l.status} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], status: v }; set("network.locations", a); }} />
+                <Field label="Status (Live network / In development / Planned)" value={l.status} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], status: v }; set("network.locations", a); }} />
                 <Field label="Detail" value={l.detail} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], detail: v }; set("network.locations", a); }} />
                 <div className="sv-field-row">
-                  <Field label="Latitude (e.g. 16.43)" value={l.lat ?? ""} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], lat: v }; set("network.locations", a); }} />
-                  <Field label="Longitude (e.g. 80.55)" value={l.lon ?? ""} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], lon: v }; set("network.locations", a); }} />
+                  <Field label="Latitude (e.g. 28.7041)" value={l.lat ?? ""} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], lat: v }; set("network.locations", a); }} />
+                  <Field label="Longitude (e.g. 77.1025)" value={l.lon ?? ""} onChange={(v) => { const a = [...draft.network.locations]; a[i] = { ...a[i], lon: v }; set("network.locations", a); }} />
                 </div>
               </div>
             ))}
             <button
               className="sv-mini-btn add"
-              onClick={() => set("network.locations", [...draft.network.locations, { name: "", status: "Planned", detail: "", lat: "15.90", lon: "79.70" }])}
+              onClick={() => set("network.locations", [...draft.network.locations, { name: "", status: "Planned", detail: "", lat: "21.1458", lon: "79.0882" }])}
             >
               + Add location
             </button>
 
-            <h3>About</h3>
+            <h3>Driver app</h3>
             <Field label="Eyebrow" value={draft.about.eyebrow} onChange={(v) => set("about.eyebrow", v)} />
             <Field label="Headline" value={draft.about.headline} onChange={(v) => set("about.headline", v)} />
             <Field label="Body" value={draft.about.body} onChange={(v) => set("about.body", v)} textarea />
             {draft.about.values.map((val, i) => (
               <div className="sv-admin-card" key={i}>
                 <div className="sv-admin-card-head">
-                  <b>VALUE {i + 1}</b>
+                  <b>FEATURE {i + 1}</b>
                   <button className="sv-mini-btn danger" onClick={() => set("about.values", draft.about.values.filter((_, j) => j !== i))}>Remove</button>
                 </div>
                 <Field label="Title" value={val.title} onChange={(v) => { const a = [...draft.about.values]; a[i] = { ...a[i], title: v }; set("about.values", a); }} />
                 <Field label="Text" value={val.text} textarea onChange={(v) => { const a = [...draft.about.values]; a[i] = { ...a[i], text: v }; set("about.values", a); }} />
               </div>
             ))}
-            <button className="sv-mini-btn add" onClick={() => set("about.values", [...draft.about.values, { title: "", text: "" }])}>+ Add value</button>
+            <button className="sv-mini-btn add" onClick={() => set("about.values", [...draft.about.values, { title: "", text: "" }])}>+ Add feature</button>
 
             <h3>Contact</h3>
             <Field label="Eyebrow" value={draft.contact.eyebrow} onChange={(v) => set("contact.eyebrow", v)} />
@@ -275,6 +282,27 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
 
         {tab === "settings" && (
           <>
+            <h3>Theme</h3>
+            <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 12 }}>
+              Pick an accent colour for the site. Applies and saves instantly.
+            </p>
+            <div className="sv-theme-grid">
+              {THEMES.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={`sv-theme-swatch ${draft.theme === t.id ? "active" : ""}`}
+                  onClick={() => chooseTheme(t.id)}
+                  aria-pressed={draft.theme === t.id}
+                  title={t.name}
+                >
+                  <span className="dot" style={{ background: `linear-gradient(135deg, ${t.brand}, ${t.brandDark})` }} aria-hidden="true" />
+                  <span className="label">{t.name}</span>
+                  {draft.theme === t.id && <span className="check">✓</span>}
+                </button>
+              ))}
+            </div>
+
             <h3>Account</h3>
             <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 12 }}>
               You're signed in with your Supabase admin account. Manage admin users (add, remove,

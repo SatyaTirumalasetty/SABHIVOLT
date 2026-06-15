@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DEFAULT_CONTENT, prefersReducedMotion, statusColor } from "./lib/content";
 import { loadContent, saveContent, getSession, onAuthChange } from "./lib/data";
-import { Highlight, CountStat, FlowDiagram, APMap, PrivacyModal } from "./components/widgets";
+import { Highlight, CountStat, FlowDiagram, LeafletMap, HeroVisual, DriverAppVisual, ServiceIcon, Icons, PrivacyModal } from "./components/widgets";
 import { EnquiryForm, LoginModal } from "./components/forms";
 import { AdminPanel } from "./components/AdminPanel";
 
@@ -26,6 +26,11 @@ export default function App() {
     })();
     return onAuthChange(setSession);
   }, []);
+
+  /* apply the chosen colour theme */
+  useEffect(() => {
+    document.documentElement.dataset.theme = content.theme || "emerald";
+  }, [content.theme]);
 
   /* scroll spy */
   useEffect(() => {
@@ -98,28 +103,40 @@ export default function App() {
 
       <nav className="sv-nav" aria-label="Main">
         <div className="sv-wrap sv-nav-inner">
-          <a href="#top" className="sv-logo">SABHI<span>VOLT</span></a>
+          <a href="#top" className="sv-logo">
+            <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
+            SABHI<span>VOLT</span>
+          </a>
           <div className="sv-links">
-            <a href="#services" className={`hide-m ${activeSection === "services" ? "active" : ""}`}>Verticals</a>
-            <a href="#model" className={`hide-m ${activeSection === "model" ? "active" : ""}`}>Model</a>
-            <a href="#network" className={`hide-m ${activeSection === "network" ? "active" : ""}`}>Network</a>
-            <a href="#about" className={`hide-m ${activeSection === "about" ? "active" : ""}`}>About</a>
+            <a href="#services" className={`hide-m ${activeSection === "services" ? "active" : ""}`}>Commercial Solutions</a>
+            <a href="#model" className={`hide-m ${activeSection === "model" ? "active" : ""}`}>Partner Model</a>
+            <a href="#network" className={`hide-m ${activeSection === "network" ? "active" : ""}`}>Infrastructure</a>
+            <a href="#about" className={`hide-m ${activeSection === "about" ? "active" : ""}`}>Driver App</a>
             <a href="#contact" className={activeSection === "contact" ? "active" : ""}>Contact</a>
           </div>
+          <a href="#contact" className="sv-btn sv-btn-solid sv-nav-cta hide-m">{c.hero.ctaPrimary}</a>
         </div>
       </nav>
 
       <header className="sv-hero" id="top">
         <div className="sv-hero-grid" aria-hidden="true" />
         <div className="sv-hero-glow" aria-hidden="true" />
-        <div className="sv-wrap">
-          <div className="sv-eyebrow">{c.hero.eyebrow}</div>
-          <h1><Highlight text={c.hero.headline} /></h1>
-          <p>{c.hero.subheadline}</p>
-          <div className="sv-hero-ctas">
-            <a href="#contact" className="sv-btn sv-btn-solid">{c.hero.ctaPrimary}</a>
-            <a href="#services" className="sv-btn sv-btn-ghost">{c.hero.ctaSecondary}</a>
+        <div className="sv-wrap sv-hero-cols">
+          <div>
+            <div className="sv-pill-badge"><span className="sv-pill-dot" aria-hidden="true" />{c.hero.eyebrow}</div>
+            <h1><Highlight text={c.hero.headline} /></h1>
+            <p>{c.hero.subheadline}</p>
+            <div className="sv-hero-ctas">
+              <a href="#contact" className="sv-btn sv-btn-solid">{c.hero.ctaPrimary}</a>
+              <a href="#network" className="sv-btn sv-btn-ghost">{c.hero.ctaSecondary}</a>
+            </div>
+            <div className="sv-feature-pills">
+              <span className="sv-feature-pill"><Icons.smartphone />100% UPI Native</span>
+              <span className="sv-feature-pill"><Icons.zap />480kW Ultrafast Ready</span>
+              <span className="sv-feature-pill"><Icons.server />OCCP 2.0 Compliant</span>
+            </div>
           </div>
+          <HeroVisual stats={c.stats} />
         </div>
       </header>
 
@@ -133,14 +150,26 @@ export default function App() {
         </div>
       </section>
 
+      <section className="sv-trustbar" aria-label="Trusted by">
+        <div className="sv-wrap">
+          <p className="sv-trustbar-label">Trusted by India's leading fleets &amp; property developers</p>
+          <div className="sv-trustbar-row">
+            <span><Icons.briefcase />Prestige Group</span>
+            <span><Icons.carFront />BluSmart</span>
+            <span><Icons.store />Phoenix Malls</span>
+            <span><Icons.route />Amazon Logistics</span>
+          </div>
+        </div>
+      </section>
+
       <section className="sv-section" id="services">
         <div className="sv-wrap">
-          <div className="sv-eyebrow">EIGHT VERTICALS, ONE NETWORK</div>
-          <h2>Everything the electric corridor needs</h2>
+          <div className="sv-eyebrow">COMMERCIAL SOLUTIONS</div>
+          <h2>Turn parking infrastructure into a revenue engine</h2>
           <p className="sv-lede">
-            Each vertical strengthens the others — solar powers the chargers,
-            storage keeps them on, amenities bring people in, and software ties
-            it all together.
+            Partner with SABHIVOLT to install resilient EV charging at your location.
+            We handle hardware, smart grid management and automated UPI
+            reconciliation — you simply earn.
           </p>
           <div className="sv-services-grid">
             {flagshipFirst.map((s, i) => (
@@ -149,6 +178,7 @@ export default function App() {
                 key={i}
                 style={{ transitionDelay: `${Math.min(i * 60, 300)}ms` }}
               >
+                <div className="sv-card-icon"><ServiceIcon code={s.code} /></div>
                 <span className="code">
                   {s.code}
                   {s.flagship && <span className="flag">FLAGSHIP</span>}
@@ -170,13 +200,16 @@ export default function App() {
         </div>
       </section>
 
-      <section className="sv-section" id="network">
+      <section className="sv-section sv-dark-band" id="network">
         <div className="sv-wrap">
           <div className="sv-eyebrow">{c.network.eyebrow}</div>
           <h2>{c.network.headline}</h2>
           <p className="sv-lede">{c.network.body}</p>
           <div className="sv-map-grid">
-            <div className="sv-reveal"><APMap locations={c.network.locations} /></div>
+            <div className="sv-map-frame sv-reveal">
+              <span className="sv-map-live-badge"><span className="dot" aria-hidden="true" />Live network</span>
+              <LeafletMap locations={c.network.locations} />
+            </div>
             <div className="sv-map-legend">
               {c.network.locations.map((l, i) => (
                 <div className="sv-legend-item sv-reveal" key={i} style={{ transitionDelay: `${i * 90}ms` }}>
@@ -193,19 +226,25 @@ export default function App() {
         </div>
       </section>
 
-      <section className="sv-section sv-network" id="about">
-        <div className="sv-wrap">
-          <div className="sv-eyebrow">{c.about.eyebrow}</div>
-          <h2>{c.about.headline}</h2>
-          <p className="sv-about-body">{c.about.body}</p>
-          <div className="sv-values">
-            {c.about.values.map((v, i) => (
-              <div className="sv-value sv-reveal" key={i} style={{ transitionDelay: `${i * 90}ms` }}>
-                <h4>{v.title}</h4>
-                <p>{v.text}</p>
-              </div>
-            ))}
+      <section className="sv-section sv-brand-band" id="about">
+        <div className="sv-wrap sv-app-cols">
+          <div>
+            <div className="sv-pill-badge sv-pill-badge-on-brand">{c.about.eyebrow}</div>
+            <h2>{c.about.headline}</h2>
+            <p className="sv-about-body">{c.about.body}</p>
+            <ul className="sv-app-features">
+              {c.about.values.map((v, i) => (
+                <li className="sv-reveal" key={i} style={{ transitionDelay: `${i * 90}ms` }}>
+                  <span className="sv-app-check"><Icons.check /></span>
+                  <div>
+                    <b>{v.title}</b>
+                    <p>{v.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
+          <DriverAppVisual />
         </div>
       </section>
 
@@ -236,12 +275,49 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="sv-footer">
-        <div className="sv-wrap sv-footer-inner">
-          <p>© {new Date().getFullYear()} SABHIVOLT · Mangalagiri, Andhra Pradesh</p>
-          <div className="sv-footer-links">
-            <button className="link" onClick={() => setPrivacyOpen(true)}>Privacy &amp; terms</button>
-            <button className="sv-admin-link" onClick={openAdmin}>⚙ Admin</button>
+      <footer className="sv-footer sv-dark-band">
+        <div className="sv-wrap">
+          <div className="sv-footer-grid">
+            <div className="sv-footer-brand">
+              <a href="#top" className="sv-logo">
+                <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
+                SABHI<span>VOLT</span>
+              </a>
+              <p>Accelerating India's transition to electric mobility through reliable, interoperable and intelligent charging infrastructure built for scale.</p>
+            </div>
+            <div className="sv-footer-col">
+              <h5>Solutions</h5>
+              <ul>
+                <li><a href="#services">Tech Parks &amp; Offices</a></li>
+                <li><a href="#services">Residential (RWA)</a></li>
+                <li><a href="#services">Highway Plazas</a></li>
+                <li><a href="#model">Partner / Host model</a></li>
+                <li><a href="#about">CPO Software</a></li>
+              </ul>
+            </div>
+            <div className="sv-footer-col">
+              <h5>Company</h5>
+              <ul>
+                <li><a href="#model">How it works</a></li>
+                <li><a href="#network">Infrastructure map</a></li>
+                <li><a href="#about">Driver app</a></li>
+                <li><a href="#contact">Contact sales</a></li>
+              </ul>
+            </div>
+            <div className="sv-footer-col">
+              <h5>Legal &amp; support</h5>
+              <ul>
+                <li><a href="#contact">Driver help centre</a></li>
+                <li><a href="#contact">Host support</a></li>
+                <li><button className="link" onClick={() => setPrivacyOpen(true)}>Privacy &amp; terms</button></li>
+                <li><a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></li>
+                <li><button className="sv-admin-link" onClick={openAdmin}>⚙ Admin</button></li>
+              </ul>
+            </div>
+          </div>
+          <div className="sv-footer-inner">
+            <p>© {new Date().getFullYear()} SABHIVOLT · Mangalagiri, Andhra Pradesh</p>
+            <span className="sv-status-badge"><span className="dot" aria-hidden="true" />System status: operational</span>
           </div>
         </div>
       </footer>

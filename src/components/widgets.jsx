@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import L from "leaflet";
 import { prefersReducedMotion, statusColor } from "../lib/content";
 import { useDialogA11y } from "../lib/a11y";
 
@@ -37,6 +38,48 @@ export function Field({ label, value, onChange, textarea, id, type, inputMode })
       )}
     </div>
   );
+}
+
+/* ── icon set (lightweight, stroke-based, currentColor) ──── */
+
+const iconBase = {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.8,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": true,
+};
+
+export const Icons = {
+  zap: (p) => <svg {...iconBase} {...p}><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" /></svg>,
+  sun: (p) => <svg {...iconBase} {...p}><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></svg>,
+  battery: (p) => <svg {...iconBase} {...p}><rect x="2" y="7" width="18" height="10" rx="2" /><path d="M22 11v2M6 10v4M10 10v4" /></svg>,
+  route: (p) => <svg {...iconBase} {...p}><circle cx="6" cy="19" r="2" /><circle cx="18" cy="5" r="2" /><path d="M8 19h8a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8" /></svg>,
+  mapPin: (p) => <svg {...iconBase} {...p}><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z" /><circle cx="12" cy="10" r="3" /></svg>,
+  megaphone: (p) => <svg {...iconBase} {...p}><path d="M3 11v3a1 1 0 0 0 1 1h2l3.5 5V5L6 10H4a1 1 0 0 0-1 1Z" /><path d="M14 7a4 4 0 0 1 0 10M18 4a8 8 0 0 1 0 16" /></svg>,
+  activity: (p) => <svg {...iconBase} {...p}><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>,
+  leaf: (p) => <svg {...iconBase} {...p}><path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 9-9h7v7a9 9 0 0 1-9 9Z" /><path d="M4 13c4 0 9-1 13-5" /></svg>,
+  briefcase: (p) => <svg {...iconBase} {...p}><rect x="2" y="7" width="20" height="13" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg>,
+  home: (p) => <svg {...iconBase} {...p}><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5" /></svg>,
+  store: (p) => <svg {...iconBase} {...p}><path d="M3 9 4 4h16l1 5" /><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0" /><path d="M5 9v10h14V9" /></svg>,
+  smartphone: (p) => <svg {...iconBase} {...p}><rect x="6" y="2" width="12" height="20" rx="2" /><path d="M11 18h2" /><path d="M9 6c1 1 5 1 6 0" /></svg>,
+  server: (p) => <svg {...iconBase} {...p}><rect x="3" y="4" width="18" height="7" rx="1.5" /><rect x="3" y="13" width="18" height="7" rx="1.5" /><path d="M7 7.5h.01M7 16.5h.01" /></svg>,
+  check: (p) => <svg {...iconBase} {...p}><path d="M20 6 9 17l-5-5" /></svg>,
+  qrCode: (p) => <svg {...iconBase} {...p}><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 14h3v3h-3zM18 18h3v3h-3z" /></svg>,
+  carFront: (p) => <svg {...iconBase} {...p}><path d="M5 17h14M5 17a2 2 0 0 1-2-2l1-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2l1 5a2 2 0 0 1-2 2M7 17v2M17 17v2" /><circle cx="7.5" cy="14.5" r="0.6" fill="currentColor" /><circle cx="16.5" cy="14.5" r="0.6" fill="currentColor" /></svg>,
+};
+
+const SERVICE_ICONS = {
+  "TP-01": Icons.briefcase,
+  "RW-02": Icons.home,
+  "HP-03": Icons.store,
+};
+
+export function ServiceIcon({ code, ...props }) {
+  const Icon = SERVICE_ICONS[code] || Icons.zap;
+  return <Icon {...props} />;
 }
 
 /* ── count-up stat ────────────────────────────────────── */
@@ -91,12 +134,43 @@ export function CountStat({ value, label }) {
   );
 }
 
+/* ── hero command-center visual ──────────────────────── */
+
+const HV_BARS = [42, 68, 50, 82, 60, 92, 70, 54, 78, 46, 64, 88];
+
+export function HeroVisual({ stats }) {
+  return (
+    <div className="sv-hero-visual sv-reveal">
+      <div className="sv-hv-bar">
+        <span /><span /><span />
+        <span className="sv-hv-title">SABHIVOLT Command Center</span>
+      </div>
+      <div className="sv-hv-body">
+        <div className="sv-hv-live"><span className="dot" aria-hidden="true" />Live network status</div>
+        <div className="sv-hv-stats">
+          {stats.slice(0, 3).map((s, i) => (
+            <div className="sv-hv-stat" key={i}>
+              <b>{s.value}</b>
+              <span>{s.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="sv-hv-graph" aria-hidden="true">
+          {HV_BARS.map((h, i) => (
+            <i key={i} style={{ height: `${h}%`, animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── energy flow diagram ──────────────────────────────── */
 
 const FlowIcons = [
   // sun
   <svg key="sun" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <circle cx="17" cy="17" r="7" stroke="#FFB930" strokeWidth="2" />
+    <circle cx="17" cy="17" r="7" stroke="#f59e0b" strokeWidth="2" />
     {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => {
       const r1 = 10.5, r2 = 14.5;
       const rad = (a * Math.PI) / 180;
@@ -105,25 +179,25 @@ const FlowIcons = [
           key={a}
           x1={17 + r1 * Math.cos(rad)} y1={17 + r1 * Math.sin(rad)}
           x2={17 + r2 * Math.cos(rad)} y2={17 + r2 * Math.sin(rad)}
-          stroke="#FFB930" strokeWidth="2" strokeLinecap="round"
+          stroke="#f59e0b" strokeWidth="2" strokeLinecap="round"
         />
       );
     })}
   </svg>,
   // battery
   <svg key="batt" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <rect x="5" y="11" width="22" height="12" rx="2" stroke="#00D4AA" strokeWidth="2" />
-    <rect x="28" y="14.5" width="3" height="5" rx="1" fill="#00D4AA" />
-    <rect x="8" y="14" width="10" height="6" rx="1" fill="#00D4AA" />
+    <rect x="5" y="11" width="22" height="12" rx="2" stroke="#10b981" strokeWidth="2" />
+    <rect x="28" y="14.5" width="3" height="5" rx="1" fill="#10b981" />
+    <rect x="8" y="14" width="10" height="6" rx="1" fill="#10b981" />
   </svg>,
   // bolt
   <svg key="bolt" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <path d="M19 4 L9 19 H16 L14 30 L25 14 H18 L19 4 Z" stroke="#00D4AA" strokeWidth="2" strokeLinejoin="round" fill="rgba(0,212,170,0.18)" />
+    <path d="M19 4 L9 19 H16 L14 30 L25 14 H18 L19 4 Z" stroke="#10b981" strokeWidth="2" strokeLinejoin="round" fill="rgba(16,185,129,0.16)" />
   </svg>,
   // rupee
   <svg key="rupee" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <text x="17" y="24" textAnchor="middle" fontSize="20" fontFamily="sans-serif" fill="#FFB930">₹</text>
-    <circle cx="17" cy="17" r="13" stroke="#FFB930" strokeWidth="2" />
+    <text x="17" y="24" textAnchor="middle" fontSize="20" fontFamily="sans-serif" fill="#f59e0b">₹</text>
+    <circle cx="17" cy="17" r="13" stroke="#f59e0b" strokeWidth="2" />
   </svg>,
 ];
 
@@ -154,98 +228,148 @@ export function FlowDiagram({ flow }) {
   );
 }
 
-/* ── Andhra Pradesh network map ───────────────────────── */
+/* ── interactive network map (Leaflet) ────────────────── */
 
-// Simplified AP outline (lat, lon) — stylised, not survey-accurate
-const AP_OUTLINE = [
-  [19.05, 84.45], [18.78, 84.05], [18.45, 83.55], [18.1, 83.4],
-  [17.75, 83.35], [17.6, 83.0], [17.3, 82.55], [17.0, 82.3],
-  [16.75, 82.3], [16.55, 81.85], [16.3, 81.3], [16.05, 81.05],
-  [15.75, 80.45], [15.4, 80.15], [14.9, 80.1], [14.4, 80.15],
-  [13.95, 80.2], [13.55, 80.15], [13.45, 79.95], [13.2, 79.75],
-  [13.05, 79.4], [12.95, 78.95], [12.75, 78.55], [12.85, 78.25],
-  [13.3, 78.1], [13.6, 77.9], [14.0, 77.45], [14.45, 77.1],
-  [14.9, 76.95], [15.25, 77.05], [15.45, 77.3], [15.8, 77.45],
-  [15.95, 77.9], [16.05, 78.3], [16.1, 78.9], [16.3, 79.25],
-  [16.55, 79.7], [16.75, 80.1], [16.95, 80.5], [16.85, 80.95],
-  [17.1, 81.2], [17.45, 81.4], [17.8, 81.65], [18.1, 81.95],
-  [18.35, 82.3], [18.6, 82.7], [18.85, 83.3], [19.1, 83.9],
-];
-
-// NH-16 coastal corridor waypoints (Chennai→Kolkata trunk through AP)
-const NH16_PATH = [
-  [13.7, 80.1], [14.44, 79.99], [15.5, 80.05], [16.31, 80.44],
-  [16.43, 80.55], [16.51, 80.65], [16.95, 81.78], [17.0, 82.25],
-  [17.69, 83.22], [18.3, 83.9], [18.9, 84.4],
-];
-
-const MAP_W = 420, MAP_H = 420, MAP_PAD = 16;
-function project(lat, lon) {
-  const LON_MIN = 76.7, LON_MAX = 84.7, LAT_MIN = 12.5, LAT_MAX = 19.3;
-  const x = MAP_PAD + ((lon - LON_MIN) / (LON_MAX - LON_MIN)) * (MAP_W - MAP_PAD * 2);
-  const y = MAP_PAD + ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * (MAP_H - MAP_PAD * 2);
-  return [x, y];
+function escapeHtml(str = "") {
+  return String(str).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
 }
 
-export function APMap({ locations }) {
-  const outline = AP_OUTLINE.map(([lat, lon]) => project(lat, lon).join(",")).join(" ");
-  const nh16 = NH16_PATH.map(([lat, lon], i) => {
-    const [x, y] = project(lat, lon);
-    return `${i === 0 ? "M" : "L"}${x},${y}`;
-  }).join(" ");
+const MAP_PIN_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>';
 
-  // Place labels first, nudging vertically to avoid overlaps between nearby pins.
-  const placedLabels = [];
-  const pins = locations.map((l) => {
-    const lat = parseFloat(l.lat), lon = parseFloat(l.lon);
-    if (Number.isNaN(lat) || Number.isNaN(lon)) return null;
-    const [x, y] = project(lat, lon);
-    const col = statusColor(l.status);
-    const labelRight = x < MAP_W * 0.62;
-    const labelX = labelRight ? x + 14 : x - 14;
-    const labelWidth = l.name.length * 5.2;
-    let labelY = y + 3.5;
-    const left = labelRight ? labelX : labelX - labelWidth;
-    const right = labelRight ? labelX + labelWidth : labelX;
-    while (
-      placedLabels.some(
-        (p) => Math.abs(labelY - p.y) < 13 && left < p.right && right > p.left
-      )
-    ) {
-      labelY += 13;
-    }
-    placedLabels.push({ y: labelY, left, right });
-    return { ...l, x, y, col, labelRight, labelX, labelY };
-  });
+/* NH-16 corridor: Chennai -> Nellore -> Ongole -> Guntur/Vijayawada -> Eluru -> Rajahmundry -> Visakhapatnam */
+const NH16_ROUTE = [
+  [13.0827, 80.2707],
+  [13.6700, 80.1700],
+  [14.4426, 79.9865],
+  [15.5057, 80.0499],
+  [16.3067, 80.4365],
+  [16.5062, 80.6480],
+  [16.7107, 81.0952],
+  [17.0005, 81.8040],
+  [17.6868, 83.2185],
+];
+
+export function LeafletMap({ locations }) {
+  const elRef = useRef(null);
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (!elRef.current || mapRef.current) return;
+    const map = L.map(elRef.current, {
+      scrollWheelZoom: false,
+      zoomControl: false,
+    }).setView([21.1458, 79.0882], 5);
+
+    L.control.zoom({ position: "topright" }).addTo(map);
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    L.polyline(NH16_ROUTE, {
+      color: "#f59e0b",
+      weight: 4,
+      opacity: 0.85,
+      dashArray: "1 6",
+      lineCap: "round",
+    })
+      .addTo(map)
+      .bindTooltip("NH-16 corridor", { permanent: false, className: "sv-map-route-tip" });
+
+    map.fitBounds(L.latLngBounds(NH16_ROUTE).pad(0.12), { maxZoom: 8 });
+
+    mapRef.current = map;
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const markers = [];
+
+    locations.forEach((loc) => {
+      const lat = parseFloat(loc.lat);
+      const lon = parseFloat(loc.lon);
+      if (Number.isNaN(lat) || Number.isNaN(lon)) return;
+      const col = statusColor(loc.status);
+      const icon = L.divIcon({
+        className: "",
+        html: `<div class="sv-map-pin" style="background:${col}">${MAP_PIN_SVG}</div>`,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+        popupAnchor: [0, -14],
+      });
+      const marker = L.marker([lat, lon], { icon, title: loc.name }).addTo(map);
+      marker.bindPopup(
+        `<div class="sv-map-popup">` +
+          `<div class="name">${escapeHtml(loc.name)}</div>` +
+          `<div class="status" style="color:${col}">${escapeHtml(loc.status)}</div>` +
+          `<div class="detail">${escapeHtml(loc.detail)}</div>` +
+        `</div>`
+      );
+      markers.push(marker);
+    });
+
+    return () => markers.forEach((m) => m.remove());
+  }, [locations]);
 
   return (
-    <div className="sv-map-frame">
-      <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} role="img" aria-label="Map of Andhra Pradesh showing SABHIVOLT network locations">
-        <polygon className="sv-map-state" points={outline} />
-        <path className="sv-map-nh16" d={nh16} />
-        <text className="sv-map-label" x={project(15.2, 80.6)[0]} y={project(15.2, 80.6)[1]} fill="#FFB930">NH-16</text>
-        {pins.map((p, i) => {
-          if (!p) return null;
-          const { x, y, col, labelRight, labelX, labelY, name } = p;
-          return (
-            <g key={i}>
-              <circle className="sv-node-pulse" cx={x} cy={y} r="8" fill="none" stroke={col} strokeWidth="1.5" />
-              <circle cx={x} cy={y} r="4.5" fill={col} />
-              <circle cx={x} cy={y} r="9" fill="none" stroke={col} strokeOpacity="0.3" strokeWidth="1" />
-              <text
-                className="sv-map-label"
-                x={labelX}
-                y={labelY}
-                textAnchor={labelRight ? "start" : "end"}
-                fill="#E9F4EF"
-              >
-                {name}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-      <div className="sv-map-caption">Stylised map · not to survey scale</div>
+    <div
+      ref={elRef}
+      className="sv-leaflet"
+      role="img"
+      aria-label="Map of SABHIVOLT charging network locations along the NH-16 corridor from Chennai to Visakhapatnam"
+    />
+  );
+}
+
+/* ── driver app phone mockup ──────────────────────────── */
+
+export function DriverAppVisual() {
+  return (
+    <div className="sv-phone sv-reveal" aria-hidden="true">
+      <div className="sv-phone-notch" />
+      <div className="sv-phone-screen">
+        <div className="sv-phone-head">
+          <div>
+            <span className="label">Welcome back</span>
+            <h4>Arjun M.</h4>
+          </div>
+          <div className="sv-phone-wallet">
+            <span className="label">Wallet</span>
+            <b>₹650.00</b>
+          </div>
+        </div>
+        <div className="sv-phone-body">
+          <div className="sv-phone-card">
+            <div>
+              <span className="label">Vehicle selected</span>
+              <h5>Tata Nexon EV Max</h5>
+            </div>
+            <span className="sv-phone-icon"><Icons.carFront /></span>
+          </div>
+          <div className="sv-phone-hub">
+            <span className="label">Nearest fast hub</span>
+            <h5>Phoenix Marketcity, Whitefield</h5>
+            <div className="sv-phone-tags">
+              <span>2.5 km away</span>
+              <span>₹18/kWh</span>
+            </div>
+            <div className="sv-phone-status">
+              <span className="dot" />2x 60kW CCS2 available
+            </div>
+          </div>
+        </div>
+        <div className="sv-phone-cta">
+          <Icons.qrCode />Scan QR to charge
+        </div>
+      </div>
     </div>
   );
 }

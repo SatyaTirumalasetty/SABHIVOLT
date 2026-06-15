@@ -10,115 +10,106 @@ export const INTEREST_OPTIONS = [
   "Other",
 ];
 
+/* Pre-defined one-click colour themes, based on Google's most-used Material palette hues */
+export const THEMES = [
+  { id: "emerald", name: "Emerald", brand: "#10b981", brandDark: "#059669" },
+  { id: "blue", name: "Google Blue", brand: "#2563eb", brandDark: "#1d4ed8" },
+  { id: "indigo", name: "Indigo", brand: "#4f46e5", brandDark: "#4338ca" },
+  { id: "teal", name: "Teal", brand: "#0d9488", brandDark: "#0f766e" },
+  { id: "purple", name: "Deep Purple", brand: "#7c3aed", brandDark: "#6d28d9" },
+  { id: "amber", name: "Amber", brand: "#f59e0b", brandDark: "#d97706" },
+  { id: "rose", name: "Rose", brand: "#e11d48", brandDark: "#be123c" },
+];
+
 export const DEFAULT_CONTENT = {
+  theme: "emerald",
   hero: {
-    eyebrow: "EV · SOLAR · STORAGE · MOBILITY",
-    headline: "Energy infrastructure for India's [electric] decade",
+    eyebrow: "BHARAT'S INTEROPERABLE EV NETWORK",
+    headline: "Intelligent charging infrastructure for [India's scale]",
     subheadline:
-      "SABHIVOLT builds, owns and operates EV charging networks, solar plants and smart energy systems across Andhra Pradesh — starting from our home base in Mangalagiri.",
-    ctaPrimary: "Partner with us",
-    ctaSecondary: "Explore our verticals",
+      "From navigating local grid complexities to managing high-density 2W/3W fleets and 480kW Ultrafast 4W charging, SABHIVOLT delivers resilient hardware and native CPO software built for the realities of the Indian market.",
+    ctaPrimary: "Host a Charger",
+    ctaSecondary: "Explore Network",
   },
   stats: [
-    { value: "8", label: "Infrastructure verticals" },
-    { value: "24/7", label: "Network operations" },
-    { value: "AP", label: "Home state, national vision" },
+    { value: "480kW", label: "Max ultrafast charging speed" },
+    { value: "100%", label: "UPI-native payments" },
+    { value: "24/7", label: "Monitored network operations" },
   ],
   services: [
     {
-      code: "EV-01",
-      title: "EV Charging Infrastructure",
+      code: "TP-01",
+      title: "Tech Parks & Offices",
+      description:
+        "Provide essential infrastructure for employees adopting electric 2-wheelers and cars. Our intelligent software handles dynamic load management to ensure facility grid stability without costly upgrades.",
+    },
+    {
+      code: "RW-02",
+      title: "Residential Societies (RWA)",
+      description:
+        "Solve charging anxiety for apartment residents. Our AC nodes (3.3kW / 7.2kW) are perfect for overnight charging, with automated individual billing synced directly to resident maintenance apps.",
+    },
+    {
+      code: "HP-03",
+      title: "Highway Plazas & Malls",
       flagship: true,
       description:
-        "DC fast charging and AC destination charging networks — site selection, installation, operations and uptime management for highways, cities and fleets. This is the anchor of everything we build.",
-    },
-    {
-      code: "RE-02",
-      title: "Renewable Energy Projects",
-      description:
-        "End-to-end development of renewable generation assets, from land and approvals to commissioning and long-term asset management.",
-    },
-    {
-      code: "SO-03",
-      title: "Solar Infrastructure",
-      description:
-        "Rooftop, ground-mount and canopy solar systems that power our charging stations and deliver clean energy to commercial partners.",
-    },
-    {
-      code: "HW-04",
-      title: "Highway Amenities",
-      description:
-        "Charging-anchored rest stops with food, retail and restrooms — turning the wait into a destination on Andhra Pradesh's busiest corridors.",
-    },
-    {
-      code: "BS-05",
-      title: "Battery Storage",
-      description:
-        "Grid-scale and behind-the-meter battery systems that store solar energy, manage peak loads and keep chargers running on demand.",
-    },
-    {
-      code: "SM-06",
-      title: "Smart Mobility",
-      description:
-        "Fleet electrification support, charge-point software and data services that make electric movement seamless for operators and drivers.",
-    },
-    {
-      code: "AD-07",
-      title: "Advertising Infrastructure",
-      description:
-        "Digital screens and brand spaces at high-dwell charging locations — premium attention in the moments drivers actually stop.",
-    },
-    {
-      code: "EM-08",
-      title: "Energy Management Systems",
-      description:
-        "Monitoring, optimisation and control platforms that tie generation, storage and charging into one intelligent energy network.",
+        "Drive footfall with SABHIVOLT Ultrafast. Offer up to 480kW DC fast charging to highway travellers and shoppers, backed by a >99% uptime guarantee for a premium customer experience.",
     },
   ],
   flow: {
-    eyebrow: "THE MODEL",
-    headline: "How the network pays for itself",
-    body: "One site, four engines. Solar generates, storage banks it, charging sells it, and amenities and advertising monetise every minute a driver spends with us.",
+    eyebrow: "THE PARTNER MODEL",
+    headline: "Turn your space into a revenue engine",
+    body: "Partner with SABHIVOLT to install resilient EV charging at your location. We handle hardware, smart grid management and automated UPI reconciliation — you simply earn.",
     steps: [
-      { title: "Solar generates", text: "Canopy and rooftop solar produce clean energy on site." },
-      { title: "Storage banks it", text: "Batteries hold energy and smooth out grid demand." },
-      { title: "Charging sells it", text: "Fast chargers deliver energy to vehicles at the kerb." },
-      { title: "The stop earns", text: "Food, retail and ad screens monetise every dwell minute." },
+      { title: "Site survey & design", text: "We assess your site's power capacity and footfall to design the right mix of AC, DC and Ultrafast chargers." },
+      { title: "Installation & grid integration", text: "SABHIVOLT hardware goes in with dynamic load management, keeping your facility's grid stable without costly upgrades." },
+      { title: "Smart operations & UPI billing", text: "Our CPO software monitors uptime 24/7 and handles every transaction — UPI, wallets and GST-compliant invoicing." },
+      { title: "You earn, hands-free", text: "Revenue from every session is reconciled and shared automatically. No hardware to manage, no billing to chase." },
     ],
   },
   network: {
     eyebrow: "THE NETWORK",
-    headline: "Where we're building",
-    body: "Our first corridor is home: the Vijayawada–Guntur–Mangalagiri belt, with expansion planned along NH-16 and key state highways. The map updates as sites move from identification to live.",
+    headline: "Expanding across the nation's arteries",
+    body: "Rapidly deploying interoperable infrastructure across Tier-1 metros, regional corridors and state highways to eliminate range anxiety. The map updates as hubs come online.",
     locations: [
-      { name: "Mangalagiri", status: "Headquarters", detail: "Operations base and pilot site", lat: "16.43", lon: "80.55" },
-      { name: "Vijayawada–Guntur corridor", status: "In development", detail: "Site identification underway", lat: "16.34", lon: "80.40" },
-      { name: "NH-16 expansion", status: "Planned", detail: "Highway charging + amenities", lat: "17.00", lon: "81.78" },
+      { name: "Delhi NCR Intercity Hub", status: "Live network", detail: "480kW Ultrafast · 8 ports available", lat: "28.7041", lon: "77.1025" },
+      { name: "Bengaluru ORR Tech Node", status: "Live network", detail: "120kW DC · 12 ports available", lat: "12.9716", lon: "77.5946" },
+      { name: "Mumbai BKC Commercial", status: "Live network", detail: "120kW DC · 6 ports available", lat: "19.0760", lon: "72.8777" },
+      { name: "Chennai Highway Express", status: "Live network", detail: "480kW Ultrafast · 4 ports available", lat: "13.0827", lon: "80.2707" },
+      { name: "Pune Hinjewadi Campus", status: "Live network", detail: "22kW AC · 20 ports available", lat: "18.5204", lon: "73.8567" },
+      { name: "Hyderabad HITEC City", status: "Live network", detail: "60kW DC · 8 ports available", lat: "17.3850", lon: "78.4867" },
+      { name: "Ahmedabad Transit Point", status: "Live network", detail: "480kW Ultrafast · 6 ports available", lat: "23.0225", lon: "72.5714" },
+      { name: "Mangalagiri HQ Hub", status: "Headquarters", detail: "480kW Ultrafast · NH-16 corridor", lat: "16.4300", lon: "80.5500" },
+      { name: "Amaravati Capital Node", status: "Develop", detail: "120kW DC · capital region expansion", lat: "16.5130", lon: "80.5165" },
+      { name: "Vijayawada NH-16 Plaza", status: "Live network", detail: "120kW DC · 10 ports available", lat: "16.5062", lon: "80.6480" },
+      { name: "Guntur City Center", status: "Live network", detail: "60kW DC · 8 ports available", lat: "16.3067", lon: "80.4365" },
+      { name: "Visakhapatnam NH-16 Gateway", status: "Develop", detail: "480kW Ultrafast · NH-16 northern terminus", lat: "17.6868", lon: "83.2185" },
     ],
   },
   about: {
-    eyebrow: "WHY SABHIVOLT EXISTS",
-    headline: "Built where the grid meets the road",
-    body: "India's EV transition will be won on its highways and in its towns — not just its metros. SABHIVOLT was founded in Mangalagiri, Andhra Pradesh, to build the charging, solar and storage backbone that this transition needs: infrastructure that is reliable, locally rooted and commercially sustainable. We don't just install equipment. We develop, operate and continuously improve energy assets as long-term owners.",
+    eyebrow: "INTEROPERABLE EXPERIENCE",
+    headline: "Discover. Charge. Pay via UPI.",
+    body: "The SABHIVOLT app makes public charging frictionless across India. Locate reliable stations, check live port availability, and pay instantly — all from one app.",
     values: [
       {
-        title: "Uptime is everything",
-        text: "A charger that doesn't work is worse than no charger. We engineer and operate for reliability first.",
+        title: "Seamless UPI & native wallets",
+        text: "Pay instantly with UPI, Paytm, PhonePe or your saved wallet — no new account needed.",
       },
       {
-        title: "Local roots, national standards",
-        text: "We build in our own backyard with the quality and safety standards of a national operator.",
+        title: "Real-time charger health alerts",
+        text: "Live port availability and fault alerts mean you never arrive at a charger that's down.",
       },
       {
-        title: "Energy that pays for itself",
-        text: "Every project pairs clean generation with real revenue — charging, amenities, advertising and services.",
+        title: "GST-compliant invoicing for fleets",
+        text: "Every session generates a GST invoice automatically — ready for fleet expense reports.",
       },
     ],
   },
   contact: {
-    eyebrow: "START A CONVERSATION",
-    headline: "Land, fleets, capital or partnerships — let's talk",
-    body: "Whether you own land on a highway corridor, run a vehicle fleet, or want to invest in energy infrastructure, send us an enquiry and we'll get back to you.",
+    eyebrow: "PARTNER WITH US",
+    headline: "Have a site, fleet or investment in mind?",
+    body: "Whether you want to host a charger at your property, electrify your fleet, or explore investment and CPO partnerships, send us an enquiry and we'll get back to you.",
     email: "hello@sabhivolt.com",
     phone: "",
     address: "Mangalagiri, Guntur District, Andhra Pradesh, India",
@@ -135,14 +126,20 @@ export const prefersReducedMotion = () =>
 
 export function guessCoords(name = "") {
   const n = name.toLowerCase();
-  if (n.includes("mangalagiri")) return { lat: "16.43", lon: "80.55" };
-  if (n.includes("vijayawada") || n.includes("guntur")) return { lat: "16.34", lon: "80.40" };
-  if (n.includes("nh-16") || n.includes("nh16")) return { lat: "17.00", lon: "81.78" };
-  if (n.includes("visakhapatnam") || n.includes("vizag")) return { lat: "17.69", lon: "83.22" };
-  if (n.includes("tirupati")) return { lat: "13.63", lon: "79.42" };
-  if (n.includes("nellore")) return { lat: "14.44", lon: "79.99" };
-  if (n.includes("kurnool")) return { lat: "15.83", lon: "78.04" };
-  return { lat: "15.90", lon: "79.70" };
+  if (n.includes("delhi") || n.includes("ncr")) return { lat: "28.7041", lon: "77.1025" };
+  if (n.includes("bengaluru") || n.includes("bangalore")) return { lat: "12.9716", lon: "77.5946" };
+  if (n.includes("mumbai")) return { lat: "19.0760", lon: "72.8777" };
+  if (n.includes("chennai")) return { lat: "13.0827", lon: "80.2707" };
+  if (n.includes("pune")) return { lat: "18.5204", lon: "73.8567" };
+  if (n.includes("hyderabad")) return { lat: "17.3850", lon: "78.4867" };
+  if (n.includes("ahmedabad")) return { lat: "23.0225", lon: "72.5714" };
+  if (n.includes("kolkata")) return { lat: "22.5726", lon: "88.3639" };
+  if (n.includes("mangalagiri")) return { lat: "16.4300", lon: "80.5500" };
+  if (n.includes("amaravati")) return { lat: "16.5130", lon: "80.5165" };
+  if (n.includes("vijayawada")) return { lat: "16.5062", lon: "80.6480" };
+  if (n.includes("guntur")) return { lat: "16.3067", lon: "80.4365" };
+  if (n.includes("visakhapatnam") || n.includes("vizag")) return { lat: "17.6868", lon: "83.2185" };
+  return { lat: "21.1458", lon: "79.0882" };
 }
 
 /* Bring any older/partial saved content up to the current shape */
@@ -150,6 +147,7 @@ export function normalizeContent(saved) {
   const base = deepClone(DEFAULT_CONTENT);
   if (!saved || typeof saved !== "object") return base;
   const merged = { ...base, ...saved };
+  if (!THEMES.some((t) => t.id === merged.theme)) merged.theme = base.theme;
   merged.flow = { ...base.flow, ...(saved.flow || {}) };
   if (!Array.isArray(merged.flow.steps) || merged.flow.steps.length !== 4) {
     merged.flow.steps = base.flow.steps;
@@ -164,7 +162,7 @@ export function normalizeContent(saved) {
 
 export function statusColor(status = "") {
   const s = status.toLowerCase();
-  if (s.includes("head") || s.includes("live")) return "#00D4AA";
-  if (s.includes("develop")) return "#FFB930";
-  return "#8AA89B";
+  if (s.includes("head") || s.includes("live")) return "#10b981";
+  if (s.includes("develop")) return "#f59e0b";
+  return "#94a3b8";
 }
