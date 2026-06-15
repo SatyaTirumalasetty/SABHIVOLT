@@ -27,6 +27,7 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
     setDraft((d) => {
       const next = deepClone(d);
       const keys = path.split(".");
+      if (keys.some((k) => k === "__proto__" || k === "constructor")) return next;
       let obj = next;
       for (let i = 0; i < keys.length - 1; i++) obj = obj[keys[i]];
       obj[keys[keys.length - 1]] = value;
