@@ -98,7 +98,8 @@ body { background: var(--bg); }
 }
 .sv-nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 24px; }
 .sv-logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 19px; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
-.sv-logo span { color: var(--brand); }
+.sv-logo-text { white-space: nowrap; }
+.sv-logo-text span { color: #10b981; }
 .sv-logo-mark {
   width: 34px; height: 34px; border-radius: 9px; background: var(--ink);
   display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;

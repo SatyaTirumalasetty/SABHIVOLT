@@ -105,7 +105,7 @@ export default function App() {
         <div className="sv-wrap sv-nav-inner">
           <a href="#top" className="sv-logo">
             <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
-            SABHI<span>VOLT</span>
+            <span className="sv-logo-text">SABHI<span>VOLT</span></span>
           </a>
           <div className="sv-links">
             <a href="#services" className={`hide-m ${activeSection === "services" ? "active" : ""}`}>Commercial Solutions</a>
@@ -281,7 +281,7 @@ export default function App() {
             <div className="sv-footer-brand">
               <a href="#top" className="sv-logo">
                 <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
-                SABHI<span>VOLT</span>
+                <span className="sv-logo-text">SABHI<span>VOLT</span></span>
               </a>
               <p>Accelerating India's transition to electric mobility through reliable, interoperable and intelligent charging infrastructure built for scale.</p>
             </div>
