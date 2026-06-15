@@ -112,7 +112,7 @@ export const DEFAULT_CONTENT = {
     body: "Whether you want to host a charger at your property, electrify your fleet, or explore investment and CPO partnerships, send us an enquiry and we'll get back to you.",
     email: "hello@sabhivolt.com",
     phone: "",
-    address: "Mangalagiri, Guntur District, Andhra Pradesh, India",
+    address: "Amaravati, Andhra Pradesh, India",
   },
 };
 

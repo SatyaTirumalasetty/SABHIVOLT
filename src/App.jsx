@@ -316,7 +316,7 @@ export default function App() {
             </div>
           </div>
           <div className="sv-footer-inner">
-            <p>© {new Date().getFullYear()} SABHIVOLT · Mangalagiri, Andhra Pradesh</p>
+            <p>© {new Date().getFullYear()} SABHIVOLT · {c.contact.address}</p>
             <span className="sv-status-badge"><span className="dot" aria-hidden="true" />System status: operational</span>
           </div>
         </div>

@@ -273,8 +273,9 @@ export function LeafletMap({ locations }) {
       color: "#f59e0b",
       weight: 4,
       opacity: 0.85,
-      dashArray: "1 6",
+      dashArray: "10 8",
       lineCap: "round",
+      className: "sv-nh16-route",
     })
       .addTo(map)
       .bindTooltip("NH-16 corridor", { permanent: false, className: "sv-map-route-tip" });

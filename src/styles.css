@@ -138,8 +138,9 @@ body { background: var(--bg); }
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em;
   color: var(--brand-dark); text-transform: uppercase; display: flex;
   align-items: center; gap: 10px; margin-bottom: 18px;
+  transition: color .35s ease;
 }
-.sv-eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--brand); }
+.sv-eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--brand); transition: background-color .35s ease; }
 
 .sv-pill-badge {
   display: inline-flex; align-items: center; gap: 9px;
@@ -150,6 +151,7 @@ body { background: var(--bg); }
 }
 .sv-pill-dot {
   width: 8px; height: 8px; border-radius: 50%; background: var(--brand); flex-shrink: 0;
+  transition: background-color .35s ease;
   box-shadow: 0 0 0 0 var(--brand-glow); animation: pill-pulse 2s infinite;
 }
 @keyframes pill-pulse {
@@ -353,6 +355,8 @@ body { background: var(--bg); }
   letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 8px; border-radius: 6px;
 }
 .sv-leaflet .sv-map-route-tip::before { display: none; }
+.sv-leaflet .sv-nh16-route { animation: nh16-march 1.4s linear infinite; }
+@keyframes nh16-march { to { stroke-dashoffset: -18; } }
 .sv-map-pin {
   width: 26px; height: 26px; border-radius: 50%; border: 2px solid #ffffff;
   display: flex; align-items: center; justify-content: center;
@@ -556,6 +560,7 @@ body { background: var(--bg); }
   border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
   cursor: pointer; font-family: var(--body); font-size: 13px; font-weight: 600; color: var(--ink);
   position: relative; text-align: left;
+  transition: border-color .35s ease, box-shadow .35s ease;
 }
 .sv-theme-swatch:hover { border-color: var(--brand); }
 .sv-theme-swatch.active { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand-dim); }
