@@ -221,10 +221,12 @@ export default function App() {
                 <span className="k">Email</span>
                 <span className="v"><a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></span>
               </div>
-              <div className="sv-contact-item">
-                <span className="k">Phone</span>
-                <span className="v"><a href={`tel:${c.contact.phone.replace(/\s/g, "")}`}>{c.contact.phone}</a></span>
-              </div>
+              {c.contact.phone?.trim() && (
+                <div className="sv-contact-item">
+                  <span className="k">Phone</span>
+                  <span className="v"><a href={`tel:${c.contact.phone.replace(/\s/g, "")}`}>{c.contact.phone}</a></span>
+                </div>
+              )}
               <div className="sv-contact-item">
                 <span className="k">Headquarters</span>
                 <span className="v">{c.contact.address}</span>

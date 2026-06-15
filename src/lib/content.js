@@ -120,7 +120,7 @@ export const DEFAULT_CONTENT = {
     headline: "Land, fleets, capital or partnerships — let's talk",
     body: "Whether you own land on a highway corridor, run a vehicle fleet, or want to invest in energy infrastructure, send us an enquiry and we'll get back to you.",
     email: "hello@sabhivolt.com",
-    phone: "+91 00000 00000",
+    phone: "",
     address: "Mangalagiri, Guntur District, Andhra Pradesh, India",
   },
 };

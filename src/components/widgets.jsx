@@ -194,18 +194,39 @@ export function APMap({ locations }) {
     return `${i === 0 ? "M" : "L"}${x},${y}`;
   }).join(" ");
 
+  // Place labels first, nudging vertically to avoid overlaps between nearby pins.
+  const placedLabels = [];
+  const pins = locations.map((l) => {
+    const lat = parseFloat(l.lat), lon = parseFloat(l.lon);
+    if (Number.isNaN(lat) || Number.isNaN(lon)) return null;
+    const [x, y] = project(lat, lon);
+    const col = statusColor(l.status);
+    const labelRight = x < MAP_W * 0.62;
+    const labelX = labelRight ? x + 14 : x - 14;
+    const labelWidth = l.name.length * 5.2;
+    let labelY = y + 3.5;
+    const left = labelRight ? labelX : labelX - labelWidth;
+    const right = labelRight ? labelX + labelWidth : labelX;
+    while (
+      placedLabels.some(
+        (p) => Math.abs(labelY - p.y) < 13 && left < p.right && right > p.left
+      )
+    ) {
+      labelY += 13;
+    }
+    placedLabels.push({ y: labelY, left, right });
+    return { ...l, x, y, col, labelRight, labelX, labelY };
+  });
+
   return (
     <div className="sv-map-frame">
       <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} role="img" aria-label="Map of Andhra Pradesh showing SABHIVOLT network locations">
         <polygon className="sv-map-state" points={outline} />
         <path className="sv-map-nh16" d={nh16} />
         <text className="sv-map-label" x={project(15.2, 80.6)[0]} y={project(15.2, 80.6)[1]} fill="#FFB930">NH-16</text>
-        {locations.map((l, i) => {
-          const lat = parseFloat(l.lat), lon = parseFloat(l.lon);
-          if (Number.isNaN(lat) || Number.isNaN(lon)) return null;
-          const [x, y] = project(lat, lon);
-          const col = statusColor(l.status);
-          const labelRight = x < MAP_W * 0.62;
+        {pins.map((p, i) => {
+          if (!p) return null;
+          const { x, y, col, labelRight, labelX, labelY, name } = p;
           return (
             <g key={i}>
               <circle className="sv-node-pulse" cx={x} cy={y} r="8" fill="none" stroke={col} strokeWidth="1.5" />
@@ -213,12 +234,12 @@ export function APMap({ locations }) {
               <circle cx={x} cy={y} r="9" fill="none" stroke={col} strokeOpacity="0.3" strokeWidth="1" />
               <text
                 className="sv-map-label"
-                x={labelRight ? x + 14 : x - 14}
-                y={y + 3.5}
+                x={labelX}
+                y={labelY}
                 textAnchor={labelRight ? "start" : "end"}
                 fill="#E9F4EF"
               >
-                {l.name}
+                {name}
               </text>
             </g>
           );
