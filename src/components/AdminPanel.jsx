@@ -27,10 +27,15 @@ export function AdminPanel({ content, onSave, onClose, onSignedOut }) {
     setDraft((d) => {
       const next = deepClone(d);
       const keys = path.split(".");
-      if (keys.some((k) => k === "__proto__" || k === "constructor")) return next;
       let obj = next;
-      for (let i = 0; i < keys.length - 1; i++) obj = obj[keys[i]];
-      obj[keys[keys.length - 1]] = value;
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (key === "__proto__" || key === "constructor") return next;
+        obj = obj[key];
+      }
+      const lastKey = keys[keys.length - 1];
+      if (lastKey === "__proto__" || lastKey === "constructor") return next;
+      obj[lastKey] = value;
       return next;
     });
   };
