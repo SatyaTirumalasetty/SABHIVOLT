@@ -69,6 +69,9 @@ export const Icons = {
   check: (p) => <svg {...iconBase} {...p}><path d="M20 6 9 17l-5-5" /></svg>,
   qrCode: (p) => <svg {...iconBase} {...p}><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><path d="M14 14h3v3h-3zM18 18h3v3h-3z" /></svg>,
   carFront: (p) => <svg {...iconBase} {...p}><path d="M5 17h14M5 17a2 2 0 0 1-2-2l1-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2l1 5a2 2 0 0 1-2 2M7 17v2M17 17v2" /><circle cx="7.5" cy="14.5" r="0.6" fill="currentColor" /><circle cx="16.5" cy="14.5" r="0.6" fill="currentColor" /></svg>,
+  arrowRight: (p) => <svg {...iconBase} {...p}><path d="M5 12h14M13 5l7 7-7 7" /></svg>,
+  plug: (p) => <svg {...iconBase} {...p}><path d="M9 2v4M15 2v4M7 8h10v4a5 5 0 0 1-5 5 5 5 0 0 1-5-5V8z" /><path d="M12 17v5" /></svg>,
+  mail: (p) => <svg {...iconBase} {...p}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 7L2 7" /></svg>,
 };
 
 const SERVICE_ICONS = {
@@ -134,32 +137,83 @@ export function CountStat({ value, label }) {
   );
 }
 
-/* ── hero command-center visual ──────────────────────── */
+/* ── hero visual v2 — live charging hub ──────────────── */
 
-const HV_BARS = [42, 68, 50, 82, 60, 92, 70, 54, 78, 46, 64, 88];
+const WAVE_H = [38,62,45,78,55,88,65,42,72,50,85,58,36,68,48,80,52,70,44,64];
 
-export function HeroVisual({ stats }) {
+export function HeroVisual() {
+  const [energy, setEnergy] = useState(14.2);
+  const r = 48;
+  const circ = 2 * Math.PI * r;
+  const offset = circ * (1 - Math.min(energy / 80, 1));
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const id = setInterval(() => {
+      setEnergy(e => Math.min(77.6, parseFloat((e + 0.12).toFixed(1))));
+    }, 1200);
+    return () => clearInterval(id);
+  }, []);
+
+  const ports = [
+    { id: 'P1', power: '480 kW', status: 'charging', vehicle: 'Mercedes EQS 580', timer: '14m' },
+    { id: 'P2', power: '60 kW',  status: 'charging', vehicle: 'Tata Nexon EV Max', timer: '31m' },
+    { id: 'P3', power: '60 kW',  status: 'available' },
+    { id: 'P4', power: '480 kW', status: 'available' },
+  ];
+
   return (
-    <div className="sv-hero-visual sv-reveal">
-      <div className="sv-hv-bar">
-        <span /><span /><span />
-        <span className="sv-hv-title">SABHIVOLT Command Center</span>
+    <div className="sv-hv2 sv-reveal" aria-hidden="true">
+      <div className="sv-hv2-head">
+        <div className="sv-hv2-live"><span className="dot" />LIVE · BENGALURU HUB</div>
+        <div className="sv-hv2-badge">2 / 4 ports active</div>
       </div>
-      <div className="sv-hv-body">
-        <div className="sv-hv-live"><span className="dot" aria-hidden="true" />Live network status</div>
-        <div className="sv-hv-stats">
-          {stats.slice(0, 3).map((s, i) => (
-            <div className="sv-hv-stat" key={i}>
-              <b>{s.value}</b>
-              <span>{s.label}</span>
+      <div className="sv-hv2-main">
+        <div className="sv-hv2-ring-wrap">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+            <circle
+              cx="60" cy="60" r={r} fill="none"
+              stroke="#10b981" strokeWidth="8" strokeLinecap="round"
+              strokeDasharray={circ} strokeDashoffset={offset}
+              transform="rotate(-90 60 60)"
+              style={{ transition: 'stroke-dashoffset 1.1s ease', filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.5))' }}
+            />
+          </svg>
+          <div className="sv-hv2-ring-label">
+            <span className="sv-hv2-ring-val">{energy.toFixed(1)}</span>
+            <span className="sv-hv2-ring-unit">kWh</span>
+            <span className="sv-hv2-ring-sub">this session</span>
+          </div>
+        </div>
+        <div className="sv-hv2-meta">
+          <div className="sv-hv2-meta-item"><span className="label">MAX SPEED</span><b>480 kW</b></div>
+          <div className="sv-hv2-meta-item"><span className="label">RATE</span><b>₹ 18 / kWh</b></div>
+          <div className="sv-hv2-meta-item"><span className="label">UPTIME</span><b>99.4%</b></div>
+        </div>
+      </div>
+      <div className="sv-hv2-ports">
+        {ports.map((p) => (
+          <div className={`sv-hv2-port ${p.status}`} key={p.id}>
+            <span className="sv-hv2-port-id">{p.id}</span>
+            <div className="sv-hv2-port-info">
+              <span className="power">{p.power}</span>
+              {p.status === 'charging'
+                ? <span className="vehicle">{p.vehicle}</span>
+                : <span className="avail">Available</span>}
             </div>
-          ))}
-        </div>
-        <div className="sv-hv-graph" aria-hidden="true">
-          {HV_BARS.map((h, i) => (
-            <i key={i} style={{ height: `${h}%`, animationDelay: `${i * 0.15}s` }} />
-          ))}
-        </div>
+            <div className="sv-hv2-port-status">
+              {p.status === 'charging'
+                ? <><span className="dot charging" />{p.timer} left</>
+                : <span className="dash">—</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="sv-hv2-wave">
+        {WAVE_H.map((h, i) => (
+          <i key={i} style={{ '--h': `${h}%`, animationDelay: `${i * 0.14}s` }} />
+        ))}
       </div>
     </div>
   );
@@ -238,19 +292,6 @@ function escapeHtml(str = "") {
 
 const MAP_PIN_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>';
 
-/* NH-16 corridor: Chennai -> Nellore -> Ongole -> Guntur/Vijayawada -> Eluru -> Rajahmundry -> Visakhapatnam */
-const NH16_ROUTE = [
-  [13.0827, 80.2707],
-  [13.6700, 80.1700],
-  [14.4426, 79.9865],
-  [15.5057, 80.0499],
-  [16.3067, 80.4365],
-  [16.5062, 80.6480],
-  [16.7107, 81.0952],
-  [17.0005, 81.8040],
-  [17.6868, 83.2185],
-];
-
 export function LeafletMap({ locations }) {
   const elRef = useRef(null);
   const mapRef = useRef(null);
@@ -269,19 +310,6 @@ export function LeafletMap({ locations }) {
       maxZoom: 19,
     }).addTo(map);
 
-    L.polyline(NH16_ROUTE, {
-      color: "#f59e0b",
-      weight: 4,
-      opacity: 0.85,
-      dashArray: "10 8",
-      lineCap: "round",
-      className: "sv-nh16-route",
-    })
-      .addTo(map)
-      .bindTooltip("NH-16 corridor", { permanent: false, className: "sv-map-route-tip" });
-
-    map.fitBounds(L.latLngBounds(NH16_ROUTE).pad(0.12), { maxZoom: 8 });
-
     mapRef.current = map;
     return () => {
       map.remove();
@@ -293,11 +321,13 @@ export function LeafletMap({ locations }) {
     const map = mapRef.current;
     if (!map) return;
     const markers = [];
+    const coords = [];
 
     locations.forEach((loc) => {
       const lat = parseFloat(loc.lat);
       const lon = parseFloat(loc.lon);
       if (Number.isNaN(lat) || Number.isNaN(lon)) return;
+      coords.push([lat, lon]);
       const col = statusColor(loc.status);
       const icon = L.divIcon({
         className: "",
@@ -317,6 +347,8 @@ export function LeafletMap({ locations }) {
       markers.push(marker);
     });
 
+    if (coords.length) map.fitBounds(L.latLngBounds(coords).pad(0.18), { maxZoom: 6 });
+
     return () => markers.forEach((m) => m.remove());
   }, [locations]);
 
@@ -325,7 +357,7 @@ export function LeafletMap({ locations }) {
       ref={elRef}
       className="sv-leaflet"
       role="img"
-      aria-label="Map of SABHIVOLT charging network locations along the NH-16 corridor from Chennai to Visakhapatnam"
+      aria-label="Map of SABHIVOLT charging network locations across India"
     />
   );
 }

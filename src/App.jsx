@@ -136,7 +136,7 @@ export default function App() {
               <span className="sv-feature-pill"><Icons.server />OCCP 2.0 Compliant</span>
             </div>
           </div>
-          <HeroVisual stats={c.stats} />
+          <HeroVisual />
         </div>
       </header>
 
@@ -152,24 +152,30 @@ export default function App() {
 
       <section className="sv-trustbar" aria-label="Trusted by">
         <div className="sv-wrap">
-          <p className="sv-trustbar-label">Trusted by India's leading fleets &amp; property developers</p>
-          <div className="sv-trustbar-row">
-            <span><Icons.briefcase />Prestige Group</span>
-            <span><Icons.carFront />BluSmart</span>
-            <span><Icons.store />Phoenix Malls</span>
-            <span><Icons.route />Amazon Logistics</span>
+          <p className="sv-trustbar-label">Trusted by leading fleets &amp; property developers</p>
+        </div>
+        <div className="sv-trustbar-track-wrap" aria-hidden="true">
+          <div className="sv-trustbar-track">
+            {[0, 1].map((n) => (
+              <div className="sv-trustbar-set" key={n}>
+                <span><Icons.home />Prestige RWAs</span>
+                <span><Icons.store />Metro Malls</span>
+                <span><Icons.carFront />BluSmart Fleets</span>
+                <span><Icons.briefcase />Embassy Parks</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="sv-section" id="services">
+      <section className="sv-section sv-services" id="services">
         <div className="sv-wrap">
           <div className="sv-eyebrow">COMMERCIAL SOLUTIONS</div>
-          <h2>Turn parking infrastructure into a revenue engine</h2>
+          <h2>Turn empty parking into a revenue engine</h2>
           <p className="sv-lede">
             Partner with SABHIVOLT to install resilient EV charging at your location.
-            We handle hardware, smart grid management and automated UPI
-            reconciliation — you simply earn.
+            We handle the hardware installation, software management, and payment
+            reconciliation. You simply earn revenue.
           </p>
           <div className="sv-services-grid">
             {flagshipFirst.map((s, i) => (
@@ -185,6 +191,11 @@ export default function App() {
                 </span>
                 <h3>{s.title}</h3>
                 <p>{s.description}</p>
+                {s.link && (
+                  <a href="#contact" className="sv-card-link">
+                    {s.link}<Icons.arrowRight />
+                  </a>
+                )}
               </article>
             ))}
           </div>
@@ -200,11 +211,22 @@ export default function App() {
         </div>
       </section>
 
-      <section className="sv-section sv-dark-band" id="network">
+      <section className="sv-section sv-dark-band sv-network" id="network">
         <div className="sv-wrap">
           <div className="sv-eyebrow">{c.network.eyebrow}</div>
           <h2>{c.network.headline}</h2>
           <p className="sv-lede">{c.network.body}</p>
+          <div className="sv-network-specs-bar">
+            {c.network.specs.map((s, i) => (
+              <div className="sv-network-spec sv-reveal" key={s.title} style={{ transitionDelay: `${i * 80}ms` }}>
+                <span className="sv-network-spec-icon">{i === 0 ? <Icons.zap /> : <Icons.plug />}</span>
+                <div>
+                  <h4>{s.title}</h4>
+                  <p>{s.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
           <div className="sv-map-grid">
             <div className="sv-map-frame sv-reveal">
               <span className="sv-map-live-badge"><span className="dot" aria-hidden="true" />Live network</span>
@@ -212,7 +234,7 @@ export default function App() {
             </div>
             <div className="sv-map-legend">
               {c.network.locations.map((l, i) => (
-                <div className="sv-legend-item sv-reveal" key={i} style={{ transitionDelay: `${i * 90}ms` }}>
+                <div className="sv-legend-item sv-reveal" key={i} style={{ transitionDelay: `${i * 55}ms` }}>
                   <span className="sv-legend-dot" style={{ background: statusColor(l.status) }} aria-hidden="true" />
                   <div>
                     <span className="name">{l.name}</span>
@@ -229,7 +251,7 @@ export default function App() {
       <section className="sv-section sv-brand-band" id="about">
         <div className="sv-wrap sv-app-cols">
           <div>
-            <div className="sv-pill-badge sv-pill-badge-on-brand">{c.about.eyebrow}</div>
+            <div className="sv-eyebrow">{c.about.eyebrow}</div>
             <h2>{c.about.headline}</h2>
             <p className="sv-about-body">{c.about.body}</p>
             <ul className="sv-app-features">
@@ -248,7 +270,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="sv-section" id="contact">
+      <section className="sv-section sv-contact" id="contact">
         <div className="sv-wrap">
           <div className="sv-eyebrow">{c.contact.eyebrow}</div>
           <h2>{c.contact.headline}</h2>
@@ -257,18 +279,27 @@ export default function App() {
             <EnquiryForm onOpenPrivacy={() => setPrivacyOpen(true)} />
             <div className="sv-contact-side">
               <div className="sv-contact-item">
-                <span className="k">Email</span>
-                <span className="v"><a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></span>
+                <span className="sv-contact-icon"><Icons.mail /></span>
+                <div>
+                  <span className="k">Email</span>
+                  <span className="v"><a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></span>
+                </div>
               </div>
               {c.contact.phone?.trim() && (
                 <div className="sv-contact-item">
-                  <span className="k">Phone</span>
-                  <span className="v"><a href={`tel:${c.contact.phone.replace(/\s/g, "")}`}>{c.contact.phone}</a></span>
+                  <span className="sv-contact-icon"><Icons.smartphone /></span>
+                  <div>
+                    <span className="k">Phone</span>
+                    <span className="v"><a href={`tel:${c.contact.phone.replace(/\s/g, "")}`}>{c.contact.phone}</a></span>
+                  </div>
                 </div>
               )}
               <div className="sv-contact-item">
-                <span className="k">Headquarters</span>
-                <span className="v">{c.contact.address}</span>
+                <span className="sv-contact-icon"><Icons.mapPin /></span>
+                <div>
+                  <span className="k">Headquarters</span>
+                  <span className="v">{c.contact.address}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -283,15 +314,14 @@ export default function App() {
                 <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
                 <span className="sv-logo-text">SABHI<span>VOLT</span></span>
               </a>
-              <p>Accelerating India's transition to electric mobility through reliable, interoperable and intelligent charging infrastructure built for scale.</p>
+              <p>Accelerating India's transition to electric mobility through reliable, accessible and intelligent charging infrastructure.</p>
             </div>
             <div className="sv-footer-col">
               <h5>Solutions</h5>
               <ul>
-                <li><a href="#services">Tech Parks &amp; Offices</a></li>
                 <li><a href="#services">Residential (RWA)</a></li>
-                <li><a href="#services">Highway Plazas</a></li>
-                <li><a href="#model">Partner / Host model</a></li>
+                <li><a href="#services">Commercial &amp; Retail</a></li>
+                <li><a href="#model">Fleet Depot Setup</a></li>
                 <li><a href="#about">CPO Software</a></li>
               </ul>
             </div>
