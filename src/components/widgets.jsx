@@ -72,12 +72,14 @@ export const Icons = {
   arrowRight: (p) => <svg {...iconBase} {...p}><path d="M5 12h14M13 5l7 7-7 7" /></svg>,
   plug: (p) => <svg {...iconBase} {...p}><path d="M9 2v4M15 2v4M7 8h10v4a5 5 0 0 1-5 5 5 5 0 0 1-5-5V8z" /><path d="M12 17v5" /></svg>,
   mail: (p) => <svg {...iconBase} {...p}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 7L2 7" /></svg>,
+  linkedin: (p) => <svg {...iconBase} {...p}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg>,
+  twitter: (p) => <svg {...iconBase} {...p}><path d="M4 4 20 20M4 20 20 4" /></svg>,
 };
 
 const SERVICE_ICONS = {
   "TP-01": Icons.briefcase,
   "RW-02": Icons.home,
-  "HP-03": Icons.store,
+  "MR-03": Icons.store,
 };
 
 export function ServiceIcon({ code, ...props }) {
@@ -301,7 +303,7 @@ export function LeafletMap({ locations }) {
     const map = L.map(elRef.current, {
       scrollWheelZoom: false,
       zoomControl: false,
-    }).setView([21.1458, 79.0882], 5);
+    }).setView([22.5937, 78.9629], 5);
 
     L.control.zoom({ position: "topright" }).addTo(map);
 
@@ -340,8 +342,10 @@ export function LeafletMap({ locations }) {
       marker.bindPopup(
         `<div class="sv-map-popup">` +
           `<div class="name">${escapeHtml(loc.name)}</div>` +
-          `<div class="status" style="color:${col}">${escapeHtml(loc.status)}</div>` +
-          `<div class="detail">${escapeHtml(loc.detail)}</div>` +
+          `<div class="detail">${loc.ports != null ? `${loc.ports} Ports Available` : escapeHtml(loc.detail)}</div>` +
+          (loc.speed != null
+            ? `<div class="sv-popup-badges"><span>Max ${escapeHtml(String(loc.speed))}</span><span>CCS2 / AC</span></div>`
+            : ``) +
         `</div>`
       );
       markers.push(marker);
@@ -357,7 +361,7 @@ export function LeafletMap({ locations }) {
       ref={elRef}
       className="sv-leaflet"
       role="img"
-      aria-label="Map of SABHIVOLT charging network locations across India"
+      aria-label="Map of Sabhivolt charging network locations across India"
     />
   );
 }
@@ -371,36 +375,36 @@ export function DriverAppVisual() {
       <div className="sv-phone-screen">
         <div className="sv-phone-head">
           <div>
-            <span className="label">Welcome back</span>
+            <span className="label">Welcome back,</span>
             <h4>Arjun M.</h4>
           </div>
           <div className="sv-phone-wallet">
-            <span className="label">Wallet</span>
+            <span className="label">Wallet Balance</span>
             <b>₹650.00</b>
           </div>
         </div>
         <div className="sv-phone-body">
           <div className="sv-phone-card">
             <div>
-              <span className="label">Vehicle selected</span>
-              <h5>Tata Nexon EV Max</h5>
+              <span className="label">Current Vehicle</span>
+              <h5>Tata Nexon EV</h5>
             </div>
             <span className="sv-phone-icon"><Icons.carFront /></span>
           </div>
           <div className="sv-phone-hub">
-            <span className="label">Nearest fast hub</span>
+            <span className="label">Nearest Station</span>
             <h5>Phoenix Marketcity, Whitefield</h5>
             <div className="sv-phone-tags">
-              <span>2.5 km away</span>
+              <span>2.5 km</span>
               <span>₹18/kWh</span>
             </div>
             <div className="sv-phone-status">
-              <span className="dot" />2x 60kW CCS2 available
+              <span className="dot" />2 CCS2 Ports Available
             </div>
           </div>
         </div>
         <div className="sv-phone-cta">
-          <Icons.qrCode />Scan QR to charge
+          <Icons.qrCode />Scan QR to Charge
         </div>
       </div>
     </div>

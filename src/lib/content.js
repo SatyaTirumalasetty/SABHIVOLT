@@ -27,7 +27,7 @@ export const DEFAULT_CONTENT = {
     eyebrow: "BHARAT'S INTEROPERABLE NETWORK",
     headline: "Future-ready infrastructure for [India's EV transition.]",
     subheadline:
-      "From navigating grid complexities to managing high-density 2W/3W fleets and premium 4W charging, SABHIVOLT delivers resilient hardware and intelligent CPO software designed specifically for the realities of the Indian market.",
+      "From navigating grid complexities to managing high-density 2W/3W fleets and premium 4W charging. Sabhivolt delivers resilient hardware and intelligent CPO software designed specifically for the realities of the Indian market.",
     ctaPrimary: "Host a Charger",
     ctaSecondary: "Find Nearest Station",
   },
@@ -48,7 +48,7 @@ export const DEFAULT_CONTENT = {
       code: "RW-02",
       title: "Residential Societies (RWA)",
       description:
-        "Solve the charging anxiety for apartment residents. Our slow-charging AC nodes (3.3kW / 7.2kW) are perfect for overnight charging, with automated individual billing synced directly to resident maintenance apps.",
+        "Solve the charging anxiety for apartment residents. Our slow-charging AC nodes (3.3kW/7.2kW) are perfect for overnight charging, with automated individual billing synced directly to resident maintenance apps.",
       link: "Explore RWA Solutions",
     },
     {
@@ -73,7 +73,7 @@ export const DEFAULT_CONTENT = {
   network: {
     eyebrow: "THE NETWORK",
     headline: "Expanding across the nation",
-    body: "SABHIVOLT is rapidly deploying interoperable infrastructure across Tier-1 metros, regional corridors and state highways — so you never face range anxiety. The map updates as hubs come online.",
+    body: "We are rapidly deploying interoperable infrastructure across Tier-1 metros, regional corridors, and state highways to ensure you never face range anxiety.",
     specs: [
       {
         title: "SABHIVOLT DC Fast & Ultrafast",
@@ -81,18 +81,18 @@ export const DEFAULT_CONTENT = {
       },
       {
         title: "SABHIVOLT AC Nodes",
-        text: "3.3kW / 7.2kW. Ubiquitous charging, perfect for 2W/3W and overnight parking.",
+        text: "3.3kW / 7.2kW. Ubiquitous charging perfect for 2W/3W and overnight parking.",
       },
     ],
     locations: [
-      { name: "Bengaluru Tech Park Hub", status: "Live network", detail: "60kW DC · 8 ports available", lat: "12.9716", lon: "77.5946" },
-      { name: "Delhi NCR Metro Connect", status: "Live network", detail: "480kW Ultrafast · 6 ports available", lat: "28.7041", lon: "77.1025" },
-      { name: "Mumbai BKC Fast Charge", status: "Live network", detail: "120kW DC · 4 ports available", lat: "19.0760", lon: "72.8777" },
-      { name: "Pune Hinjewadi Node", status: "Live network", detail: "7.2kW AC · 12 ports available", lat: "18.5204", lon: "73.8567" },
-      { name: "Chennai OMR Express", status: "Live network", detail: "480kW Ultrafast · 6 ports available", lat: "13.0827", lon: "80.2707" },
-      { name: "Hyderabad HITEC City", status: "Live network", detail: "120kW DC · 8 ports available", lat: "17.3850", lon: "78.4867" },
-      { name: "Ahmedabad Highway Station", status: "Live network", detail: "480kW Ultrafast · 4 ports available", lat: "23.0225", lon: "72.5714" },
-      { name: "Gurugram Cyber City", status: "Live network", detail: "7.2kW AC · 15 ports available", lat: "28.4595", lon: "77.0266" },
+      { name: "Bengaluru Tech Park Hub", status: "Live network", detail: "60kW DC · 8 ports available", speed: "60kW DC", ports: 8, lat: "12.9716", lon: "77.5946" },
+      { name: "Delhi NCR Metro Connect", status: "Live network", detail: "480kW Ultrafast · 6 ports available", speed: "480kW Ultrafast", ports: 6, lat: "28.7041", lon: "77.1025" },
+      { name: "Mumbai BKC Fast Charge", status: "Live network", detail: "120kW DC · 4 ports available", speed: "120kW DC", ports: 4, lat: "19.0760", lon: "72.8777" },
+      { name: "Pune Hinjewadi Node", status: "Live network", detail: "7.2kW AC · 12 ports available", speed: "7.2kW AC", ports: 12, lat: "18.5204", lon: "73.8567" },
+      { name: "Chennai OMR Express", status: "Live network", detail: "480kW Ultrafast · 6 ports available", speed: "480kW Ultrafast", ports: 6, lat: "13.0827", lon: "80.2707" },
+      { name: "Hyderabad HITEC City", status: "Live network", detail: "120kW DC · 8 ports available", speed: "120kW DC", ports: 8, lat: "17.3850", lon: "78.4867" },
+      { name: "Ahmedabad Highway Station", status: "Live network", detail: "480kW Ultrafast · 4 ports available", speed: "480kW Ultrafast", ports: 4, lat: "23.0225", lon: "72.5714" },
+      { name: "Gurugram Cyber City", status: "Live network", detail: "7.2kW AC · 15 ports available", speed: "7.2kW AC", ports: 15, lat: "28.4595", lon: "77.0266" },
     ],
   },
   about: {
@@ -101,7 +101,7 @@ export const DEFAULT_CONTENT = {
     body: "The SABHIVOLT app makes public charging frictionless. Locate reliable stations, check live port availability, and pay instantly using PhonePe, GPay, or Paytm.",
     values: [
       {
-        title: "Seamless UPI & native wallet integration",
+        title: "Seamless UPI & native Wallet integration",
         text: "Pay instantly with UPI, Paytm, PhonePe or your saved wallet — no new account needed.",
       },
       {

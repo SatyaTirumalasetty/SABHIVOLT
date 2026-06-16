@@ -5,7 +5,7 @@ import { Highlight, CountStat, FlowDiagram, LeafletMap, HeroVisual, DriverAppVis
 import { EnquiryForm, LoginModal } from "./components/forms";
 import { AdminPanel } from "./components/AdminPanel";
 
-const NAV_SECTIONS = ["services", "model", "network", "about", "contact"];
+const NAV_SECTIONS = ["business", "model", "network", "drivers", "contact"];
 
 export default function App() {
   const [content, setContent] = useState(DEFAULT_CONTENT);
@@ -108,13 +108,12 @@ export default function App() {
             <span className="sv-logo-text">SABHI<span>VOLT</span></span>
           </a>
           <div className="sv-links">
-            <a href="#services" className={`hide-m ${activeSection === "services" ? "active" : ""}`}>Commercial Solutions</a>
-            <a href="#model" className={`hide-m ${activeSection === "model" ? "active" : ""}`}>Partner Model</a>
-            <a href="#network" className={`hide-m ${activeSection === "network" ? "active" : ""}`}>Infrastructure</a>
-            <a href="#about" className={`hide-m ${activeSection === "about" ? "active" : ""}`}>Driver App</a>
-            <a href="#contact" className={activeSection === "contact" ? "active" : ""}>Contact</a>
+            <a href="#drivers" className={`hide-m ${activeSection === "drivers" ? "active" : ""}`}>For Drivers</a>
+            <a href="#business" className={`hide-m ${activeSection === "business" ? "active" : ""}`}>Host a Charger</a>
+            <a href="#network" className={`hide-m ${activeSection === "network" ? "active" : ""}`}>Network Map</a>
+            <button className="link hide-m" onClick={openAdmin}>Partner Login</button>
           </div>
-          <a href="#contact" className="sv-btn sv-btn-solid sv-nav-cta hide-m">{c.hero.ctaPrimary}</a>
+          <a href="#contact" className="sv-btn sv-btn-solid sv-nav-cta hide-m">Contact Sales</a>
         </div>
       </nav>
 
@@ -131,9 +130,8 @@ export default function App() {
               <a href="#network" className="sv-btn sv-btn-ghost">{c.hero.ctaSecondary}</a>
             </div>
             <div className="sv-feature-pills">
-              <span className="sv-feature-pill"><Icons.smartphone />100% UPI Native</span>
-              <span className="sv-feature-pill"><Icons.zap />480kW Ultrafast Ready</span>
-              <span className="sv-feature-pill"><Icons.server />OCCP 2.0 Compliant</span>
+              <span className="sv-feature-pill"><Icons.smartphone />100% UPI Enabled</span>
+              <span className="sv-feature-pill"><Icons.plug />CCS2, Bharat DC-001 &amp; LEV AC</span>
             </div>
           </div>
           <HeroVisual />
@@ -168,12 +166,12 @@ export default function App() {
         </div>
       </section>
 
-      <section className="sv-section sv-services" id="services">
+      <section className="sv-section sv-services" id="business">
         <div className="sv-wrap">
           <div className="sv-eyebrow">COMMERCIAL SOLUTIONS</div>
           <h2>Turn empty parking into a revenue engine</h2>
           <p className="sv-lede">
-            Partner with SABHIVOLT to install resilient EV charging at your location.
+            Partner with Sabhivolt to install resilient EV charging at your location.
             We handle the hardware installation, software management, and payment
             reconciliation. You simply earn revenue.
           </p>
@@ -245,10 +243,13 @@ export default function App() {
               ))}
             </div>
           </div>
+          <div className="sv-network-cta sv-reveal">
+            <a href="#contact" className="sv-btn sv-btn-ghost">View Complete Network</a>
+          </div>
         </div>
       </section>
 
-      <section className="sv-section sv-brand-band" id="about">
+      <section className="sv-section sv-brand-band" id="drivers">
         <div className="sv-wrap sv-app-cols">
           <div>
             <div className="sv-eyebrow">{c.about.eyebrow}</div>
@@ -314,40 +315,45 @@ export default function App() {
                 <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
                 <span className="sv-logo-text">SABHI<span>VOLT</span></span>
               </a>
-              <p>Accelerating India's transition to electric mobility through reliable, accessible and intelligent charging infrastructure.</p>
+              <p>Accelerating India's transition to electric mobility through reliable, accessible, and intelligent charging infrastructure.</p>
+              <div className="sv-footer-social">
+                <a href="https://linkedin.com/company/sabhivolt" className="sv-social-link" aria-label="LinkedIn" target="_blank" rel="noreferrer"><Icons.linkedin /></a>
+                <a href="https://twitter.com/sabhivolt" className="sv-social-link" aria-label="Twitter (X)" target="_blank" rel="noreferrer"><Icons.twitter /></a>
+                <a href={`mailto:${c.contact.email}`} className="sv-social-link" aria-label="Email"><Icons.mail /></a>
+              </div>
             </div>
             <div className="sv-footer-col">
               <h5>Solutions</h5>
               <ul>
-                <li><a href="#services">Residential (RWA)</a></li>
-                <li><a href="#services">Commercial &amp; Retail</a></li>
+                <li><a href="#business">Residential (RWA)</a></li>
+                <li><a href="#business">Commercial &amp; Retail</a></li>
                 <li><a href="#model">Fleet Depot Setup</a></li>
-                <li><a href="#about">CPO Software</a></li>
+                <li><a href="#drivers">CPO Software</a></li>
               </ul>
             </div>
             <div className="sv-footer-col">
               <h5>Company</h5>
               <ul>
-                <li><a href="#model">How it works</a></li>
-                <li><a href="#network">Infrastructure map</a></li>
-                <li><a href="#about">Driver app</a></li>
-                <li><a href="#contact">Contact sales</a></li>
+                <li><a href="#top">About Sabhivolt</a></li>
+                <li><a href="#contact">Careers</a></li>
+                <li><a href="#contact">Newsroom</a></li>
+                <li><a href="#contact">Contact Sales</a></li>
               </ul>
             </div>
             <div className="sv-footer-col">
-              <h5>Legal &amp; support</h5>
+              <h5>Support</h5>
               <ul>
-                <li><a href="#contact">Driver help centre</a></li>
-                <li><a href="#contact">Host support</a></li>
-                <li><button className="link" onClick={() => setPrivacyOpen(true)}>Privacy &amp; terms</button></li>
-                <li><a href={`mailto:${c.contact.email}`}>{c.contact.email}</a></li>
+                <li><a href="#contact">Driver Help Center</a></li>
+                <li><a href="#contact">Host Support</a></li>
+                <li><button className="link" onClick={() => setPrivacyOpen(true)}>Privacy Policy</button></li>
+                <li><button className="link" onClick={() => setPrivacyOpen(true)}>Terms of Service</button></li>
                 <li><button className="sv-admin-link" onClick={openAdmin}>⚙ Admin</button></li>
               </ul>
             </div>
           </div>
           <div className="sv-footer-inner">
-            <p>© {new Date().getFullYear()} SABHIVOLT · {c.contact.address}</p>
-            <span className="sv-status-badge"><span className="dot" aria-hidden="true" />System status: operational</span>
+            <p>© {new Date().getFullYear()} Sabhivolt Pvt. Ltd. All rights reserved.</p>
+            <span className="sv-status-badge"><span className="dot" aria-hidden="true" />System Status: Operational</span>
           </div>
         </div>
       </footer>
