@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DEFAULT_CONTENT, prefersReducedMotion, statusColor } from "./lib/content";
 import { loadContent, saveContent, getSession, onAuthChange } from "./lib/data";
-import { Highlight, CountStat, FlowDiagram, LeafletMap, HeroVisual, DriverAppVisual, ServiceIcon, Icons, PrivacyModal } from "./components/widgets";
+import { Highlight, CountStat, FlowDiagram, LeafletMap, HeroVisual, DriverAppVisual, ServiceIcon, Icons, PrivacyModal, SabhiLogoMark } from "./components/widgets";
 import { EnquiryForm, LoginModal } from "./components/forms";
 import { AdminPanel } from "./components/AdminPanel";
 
@@ -104,8 +104,11 @@ export default function App() {
       <nav className="sv-nav" aria-label="Main">
         <div className="sv-wrap sv-nav-inner">
           <a href="#top" className="sv-logo">
-            <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
-            <span className="sv-logo-text">SABHI<span>VOLT</span></span>
+            <span className="sv-logo-mark"><SabhiLogoMark /></span>
+            <span className="sv-logo-wordmark">
+              <span className="sv-logo-text">SABHI<span>VOLT</span></span>
+              <span className="sv-logo-tagline">EV CHARGING INFRASTRUCTURE</span>
+            </span>
           </a>
           <div className="sv-links">
             <a href="#drivers" className={`hide-m ${activeSection === "drivers" ? "active" : ""}`}>For Drivers</a>
@@ -312,8 +315,11 @@ export default function App() {
           <div className="sv-footer-grid">
             <div className="sv-footer-brand">
               <a href="#top" className="sv-logo">
-                <span className="sv-logo-mark"><Icons.zap stroke="#10b981" /></span>
-                <span className="sv-logo-text">SABHI<span>VOLT</span></span>
+                <span className="sv-logo-mark"><SabhiLogoMark /></span>
+                <span className="sv-logo-wordmark">
+                  <span className="sv-logo-text">SABHI<span>VOLT</span></span>
+                  <span className="sv-logo-tagline">EV CHARGING INFRASTRUCTURE</span>
+                </span>
               </a>
               <p>Accelerating India's transition to electric mobility through reliable, accessible, and intelligent charging infrastructure.</p>
               <div className="sv-footer-social">
@@ -367,7 +373,7 @@ export default function App() {
         />
       )}
 
-      {adminOpen && (
+      {adminOpen && session && (
         <AdminPanel
           content={content}
           onSave={handleSave}

@@ -40,6 +40,30 @@ export function Field({ label, value, onChange, textarea, id, type, inputMode })
   );
 }
 
+/* ── SabhiVOLT silver S monogram ─────────────────────────── */
+
+export const SabhiLogoMark = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="svMono" x1="5" y1="3" x2="17" y2="19" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#F5F5F5"/>
+        <stop offset="20%" stopColor="#D4D4D4"/>
+        <stop offset="50%" stopColor="#A8A8A8"/>
+        <stop offset="80%" stopColor="#CFCFCF"/>
+        <stop offset="100%" stopColor="#EBEBEB"/>
+      </linearGradient>
+    </defs>
+    <path
+      d="M15 4.5C18 4, 9 2, 6 5.5C3 8, 4.5 12.5, 11 12.5C17 12.5, 19 14.5, 17 18C16 21, 12 22.5, 8 21.5"
+      stroke="url(#svMono)"
+      strokeWidth="2.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
+);
+
 /* ── icon set (lightweight, stroke-based, currentColor) ──── */
 
 const iconBase = {
@@ -176,10 +200,10 @@ export function HeroVisual() {
             <circle cx="60" cy="60" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
             <circle
               cx="60" cy="60" r={r} fill="none"
-              stroke="#10b981" strokeWidth="8" strokeLinecap="round"
+              stroke="#E91E63" strokeWidth="8" strokeLinecap="round"
               strokeDasharray={circ} strokeDashoffset={offset}
               transform="rotate(-90 60 60)"
-              style={{ transition: 'stroke-dashoffset 1.1s ease', filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.5))' }}
+              style={{ transition: 'stroke-dashoffset 1.1s ease', filter: 'drop-shadow(0 0 8px rgba(233,30,99,0.5))' }}
             />
           </svg>
           <div className="sv-hv2-ring-label">
@@ -242,13 +266,13 @@ const FlowIcons = [
   </svg>,
   // battery
   <svg key="batt" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <rect x="5" y="11" width="22" height="12" rx="2" stroke="#10b981" strokeWidth="2" />
-    <rect x="28" y="14.5" width="3" height="5" rx="1" fill="#10b981" />
-    <rect x="8" y="14" width="10" height="6" rx="1" fill="#10b981" />
+    <rect x="5" y="11" width="22" height="12" rx="2" stroke="#E91E63" strokeWidth="2" />
+    <rect x="28" y="14.5" width="3" height="5" rx="1" fill="#E91E63" />
+    <rect x="8" y="14" width="10" height="6" rx="1" fill="#E91E63" />
   </svg>,
   // bolt
   <svg key="bolt" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-    <path d="M19 4 L9 19 H16 L14 30 L25 14 H18 L19 4 Z" stroke="#10b981" strokeWidth="2" strokeLinejoin="round" fill="rgba(16,185,129,0.16)" />
+    <path d="M19 4 L9 19 H16 L14 30 L25 14 H18 L19 4 Z" stroke="#E91E63" strokeWidth="2" strokeLinejoin="round" fill="rgba(233,30,99,0.16)" />
   </svg>,
   // rupee
   <svg key="rupee" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">

@@ -12,6 +12,7 @@ export const INTEREST_OPTIONS = [
 
 /* Pre-defined one-click colour themes, based on Google's most-used Material palette hues */
 export const THEMES = [
+  { id: "sabhivolt", name: "SabhiVOLT Pink", brand: "#E91E63", brandDark: "#C2185B" },
   { id: "emerald", name: "Emerald", brand: "#10b981", brandDark: "#059669" },
   { id: "blue", name: "Google Blue", brand: "#2563eb", brandDark: "#1d4ed8" },
   { id: "indigo", name: "Indigo", brand: "#4f46e5", brandDark: "#4338ca" },
@@ -22,7 +23,7 @@ export const THEMES = [
 ];
 
 export const DEFAULT_CONTENT = {
-  theme: "emerald",
+  theme: "sabhivolt",
   hero: {
     eyebrow: "BHARAT'S INTEROPERABLE NETWORK",
     headline: "Future-ready infrastructure for [India's EV transition.]",
